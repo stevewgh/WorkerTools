@@ -5,7 +5,7 @@ FROM ubuntu:18.04
 # get `wget` & software-properties-common
 # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#ubuntu-1804
 RUN apt-get update && \ 
-    apt-get install -y wget unzip apt-utils && \ 
+    apt-get install -y wget unzip apt-utils curl && \ 
     apt-get install -y software-properties-common 
 # get powershell for 18.04
 RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb && \
@@ -19,13 +19,14 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsof
 RUN pwsh -c 'Install-Module -Force -Name Az -AllowClobber -Scope AllUsers'
 
 # Get python
-# TODO: What version of python do we need here?
-RUN add-apt-repository ppa:deadsnakes/ppa && apt install -y python-minimal 
+RUN apt-get install -y python3-pip && alias python3='python'
+
+# Get Helm3
+RUN wget --quiet -O - https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash -s -- -v v3.0.2
 
 # Get AWS CLI
-RUN wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" && \
-     unzip awscli-bundle.zip && \
-     ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+# https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html#install-linux-awscli
+RUN pip3 install awscli --upgrade
 
 # Get .NET SDK 3.1
 # https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-ubuntu-1804
