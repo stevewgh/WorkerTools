@@ -18,15 +18,10 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsof
 # https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.6.1
 RUN pwsh -c 'Install-Module -Force -Name Az -AllowClobber -Scope AllUsers'
 
-# Get python
-RUN apt-get install -y python3-pip && alias python3='python'
 
 # Get Helm3
 RUN wget --quiet -O - https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash -s -- -v v3.0.2
 
-# Get AWS CLI
-# https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html#install-linux-awscli
-RUN pip3 install awscli --upgrade
 
 # Get .NET SDK 3.1
 # https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-ubuntu-1804
@@ -74,3 +69,10 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
 RUN apt-get install -y ca-certificates gnupg
 RUN wget -q -O - https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
 RUN apt-get update && apt-get install -y google-cloud-sdk
+
+# Get python & groff
+RUN apt-get install -y python3-pip groff
+
+# Get AWS CLI
+# https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html#install-linux-awscli
+RUN pip3 install awscli --upgrade
