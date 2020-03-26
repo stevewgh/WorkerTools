@@ -1,7 +1,5 @@
 FROM ubuntu:18.04
 
-# TODO: Consider wget --quiet -O - ... instead of wget ... | cat ... | 
-
 # get `wget` & software-properties-common
 # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#ubuntu-1804
 RUN apt-get update && \ 
@@ -35,23 +33,21 @@ RUN apt install -y default-jdk
 
 # Get Azure CLI
 # https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt?view=azure-cli-latest
-RUN wget https://packages.microsoft.com/keys/microsoft.asc | cat microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
+RUN wget --quiet -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ bionic main" | tee /etc/apt/sources.list.d/azure-cli.list
 RUN apt-get update && \
     apt-get install -y azure-cli
 
 # Get NodeJS
 # https://websiteforstudents.com/how-to-install-node-js-10-11-12-on-ubuntu-16-04-18-04-via-apt-and-snap/\
-RUN wget https://deb.nodesource.com/setup_12.x | cat setup_12.x | bash && \
+RUN wget --quiet -O - https://deb.nodesource.com/setup_12.x | bash && \
     apt-get install -y nodejs
 
 # Get Kubectl
 # https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-using-native-package-management
-
-#TODO: Do we need a specific version here?
 RUN wget --quiet -O - https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 RUN echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
-RUN apt-get update && apt-get install -y kubectl
+RUN apt-get update && apt-get install -y kubectl=1.11.1-00
 
 # Get Terraform
 # https://computingforgeeks.com/how-to-install-terraform-on-ubuntu-centos-7/
