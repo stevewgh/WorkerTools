@@ -55,10 +55,6 @@ RUN wget https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linu
     unzip terraform_0.12.24_linux_amd64.zip && \
     mv terraform /usr/local/bin
 
-# Get Azure Functions core tools 3
-# https://github.com/Azure/azure-functions-core-tools
-RUN apt-get install -y azure-functions-core-tools-3
-
 # Install Google Cloud CLI
 # https://cloud.google.com/sdk/docs/downloads-apt-get
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
