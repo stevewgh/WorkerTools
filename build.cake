@@ -36,6 +36,7 @@ Setup(context =>
         try
         {
             var gitVersionInfo = GitVersion(new GitVersionSettings {
+                NoFetch = true,
                 OutputType = GitVersionOutput.Json,
                 LogFilePath = logFilePath
             });
