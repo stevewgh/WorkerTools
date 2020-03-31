@@ -16,10 +16,8 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsof
 # https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.6.1
 RUN pwsh -c 'Install-Module -Force -Name Az -AllowClobber -Scope AllUsers'
 
-
 # Get Helm3
 RUN wget --quiet -O - https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash -s -- -v v3.0.2
-
 
 # Get .NET SDK 3.1
 # https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-ubuntu-1804
@@ -68,3 +66,13 @@ RUN apt-get install -y python3-pip groff
 # Get AWS CLI
 # https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html#install-linux-awscli
 RUN pip3 install awscli --upgrade
+
+# Install Ruby
+# https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-16-04
+RUN apt-get install autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm5 libgdbm-dev git -y && \
+    git clone https://github.com/sstephenson/rbenv.git /root/.rbenv && \ 
+    git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build && \
+    ./root/.rbenv/plugins/ruby-build/install.sh
+ENV PATH /root/.rbenv/bin:$PATH
+RUN echo 'eval "$(rbenv init -)"' >> ~/.bashrc && \
+    rbenv install 2.7.0 && rbenv global 2.7.0
