@@ -29,14 +29,32 @@ Setup(context =>
     var fromEnv = context.EnvironmentVariable("GitVersion.semVer");
     
     if (string.IsNullOrEmpty(fromEnv))
-    { 
-        var gitVersionInfo = GitVersion(new GitVersionSettings {
-            OutputType = GitVersionOutput.Json
-        });
-        semVer = gitVersionInfo.SemVer;
-        Information("Building step-execution-container images v{0}", semVer);
-        Information("Informational Version {0}", gitVersionInfo.InformationalVersion);
-        Verbose("GitVersion:\n{0}", gitVersionInfo.Dump());
+    {
+        var tempPath = context.MakeAbsolute(context.Directory("./build")).Combine("temp");
+        var logFilePath = tempPath.CombineWithFilePath("gitversion.log");
+
+        try
+        {
+            var gitVersionInfo = GitVersion(new GitVersionSettings {
+                OutputType = GitVersionOutput.Json,
+                LogFilePath = logFilePath
+            });
+            semVer = gitVersionInfo.SemVer;
+            Information("Building step-execution-container images v{0}", semVer);
+            Information("Informational Version {0}", gitVersionInfo.InformationalVersion);
+            Verbose("GitVersion:\n{0}", gitVersionInfo.Dump());
+        }
+        finally
+        {
+            Information($"The GitVersion log file is available at {logFilePath}");
+
+            if (BuildSystem.IsRunningOnTeamCity)
+            {
+                Information($"The GitVersion log file will be stored as a TeamCity build artifact called {logFilePath.GetFilename()} just in case you need to analyse it.");
+                var buildSystem = BuildSystemAliases.BuildSystem(Context);
+                buildSystem.TeamCity.PublishArtifacts(logFilePath.FullPath);
+            }
+        }
     }
     else
     {
