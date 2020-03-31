@@ -56,7 +56,7 @@ Setup(context =>
             {
                 Information($"The GitVersion log file will be stored as a TeamCity build artifact called {logFilePath.GetFilename()} just in case you need to analyse it.");
                 var buildSystem = BuildSystemAliases.BuildSystem(Context);
-                buildSystem.TeamCity.PublishArtifacts(logFilePath.FullPath);
+                buildSystem.TeamCity.PublishArtifacts(logFilePath);
             }
         }
     }
