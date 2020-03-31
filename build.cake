@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////
 // TOOLS
 //////////////////////////////////////////////////////////////////////
-#tool "nuget:?package=GitVersion.CommandLine&version=5.2.0"
+#tool "nuget:?package=GitVersion.CommandLine&version=4.0.0"
 #addin "nuget:?package=Cake.Docker&version=0.10.0"
 #addin "nuget:?package=Cake.Incubator&version=5.1.0"
 
@@ -35,6 +35,16 @@ Setup(context =>
 
         try
         {
+            if (IsRunningOnUnix())
+            {
+                using(var process = StartAndReturnProcess("xmlstarlet", new ProcessSettings{ Arguments = "edit -O --inplace --update \"//dllmap[@os='linux']/@target\" --value \"/lib64/libgit2.so.26\" tools/GitVersion.CommandLine.4.0.0/tools/LibGit2Sharp.dll.config" }))
+                {
+                    process.WaitForExit();
+                    // This should output 0 as valid arguments supplied
+                    Information("Exit code: {0}", process.GetExitCode());
+                }
+            }
+
             var gitVersionInfo = GitVersion(new GitVersionSettings {
                 NoFetch = true,
                 OutputType = GitVersionOutput.Json,
