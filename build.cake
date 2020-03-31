@@ -39,10 +39,14 @@ Setup(context =>
                 OutputType = GitVersionOutput.Json,
                 LogFilePath = logFilePath
             });
-            semVer = gitVersionInfo.SemVer;
-            Information("Building step-execution-container images v{0}", semVer);
             Information("Informational Version {0}", gitVersionInfo.InformationalVersion);
             Verbose("GitVersion:\n{0}", gitVersionInfo.Dump());
+            semVer = gitVersionInfo.SemVer;
+            Information("Building step-execution-container images v{0}", semVer);
+        }
+        catch (Exception e)
+        {
+            Information(e);
         }
         finally
         {
