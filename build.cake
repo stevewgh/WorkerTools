@@ -20,6 +20,7 @@ var target = Argument("target", "Default");
 // GLOBAL VARIABLES
 ///////////////////////////////////////////////////////////////////////////////
 string semVer;
+string tag;
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -27,7 +28,7 @@ string semVer;
 Setup(context =>
 {
     var fromEnv = context.EnvironmentVariable("GitVersion.semVer");
-    
+
     if (string.IsNullOrEmpty(fromEnv))
     {
         var tempPath = context.MakeAbsolute(context.Directory("./build")).Combine("temp");
@@ -93,15 +94,69 @@ Teardown(context =>
 Task("Build")
     .Does(() =>
 {
-    var tag = $"octopusdeploy/step-execution-container:{semVer}-ubuntu1804";
+    tag = $"octopusdeploy/step-execution-container:{semVer}-ubuntu1804";
     DockerBuild(new DockerImageBuildSettings { Tag = new [] { tag } }, "ubuntu.18.04");
+});
+
+Task("Test")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+    var currentDirectory = MakeAbsolute(Directory("./"));
+    if (IsRunningOnUnix())
+    {
+        try
+        {
+            using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"run -v {currentDirectory}:/app {tag} /bin/bash -c 'cd app/ubuntu.18.04 && ./scripts/run_tests_during_build.sh'" }))
+            {
+                process.WaitForExit();
+                // This should output 0 as valid arguments supplied
+                Information("Exit code: {0}", process.GetExitCode());
+                if (process.GetExitCode() > 0)
+                {
+                    throw new Exception("Tests exited with exit code grater than 0");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Information(e);
+            throw; // rethrow the exception so cake will fail
+        }
+    }
+});
+
+Task("Push")
+    .IsDependentOn("Build")
+    .IsDependentOn("Test")
+    .Does(() =>
+{
+    try
+    {
+        Information("Releasing image " + tag + " to Docker Hub");
+         using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"push {tag}" }))
+        {
+            process.WaitForExit();
+            // This should output 0 as valid arguments supplied
+            Information("Exit code: {0}", process.GetExitCode());
+            if (process.GetExitCode() > 0)
+            {
+                throw new Exception("Pushing docker image failed");
+            }
+        }
+    } catch (Exception e)
+    {
+        Information(e);
+        throw; // rethrow the exception so cake will fail
+    }
 });
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
 //////////////////////////////////////////////////////////////////////
 Task("Default")
-    .IsDependentOn("Build");
+    .IsDependentOn("Build")
+    .IsDependentOn("Test");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
