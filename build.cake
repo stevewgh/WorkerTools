@@ -146,6 +146,7 @@ Task("Test")
     {
         try
         {
+            Information($"Running tests against {dockerTag.completeTag}");
             using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"run -v {currentDirectory}:/app {dockerTag.completeTag} /bin/bash -c 'cd app/ubuntu.18.04 && ./scripts/run_tests_during_build.sh'" }))
             {
                 process.WaitForExit();
