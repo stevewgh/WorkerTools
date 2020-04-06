@@ -11,7 +11,7 @@ class OctopusDockerTag
 {
     public string operatingSystem { get; set; }
     public string dockerNamespace { get; }
-    public string completeVersion { get; }
+    public string completeTag { get; }
     public string version { get; set; }
     public string tag { get; set; }
     private GitVersion gitVersion;
@@ -22,7 +22,7 @@ class OctopusDockerTag
         this.version =  $"{gitVersion.Major}.{gitVersion.Minor}.{gitVersion.Patch}";
         this.tag = $"{version}-{operatingSystem}";
         this.dockerNamespace = "octopusdeploy/step-execution-container";
-        this.completeVersion = $"{this.dockerNamespace}:{this.version}-{this.operatingSystem}";
+        this.completeTag = $"{this.dockerNamespace}:{this.version}-{this.operatingSystem}";
     }
 
     public string[] Tags() {
@@ -146,7 +146,7 @@ Task("Test")
     {
         try
         {
-            using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"run -v {currentDirectory}:/app {dockerTag.tag} /bin/bash -c 'cd app/ubuntu.18.04 && ./scripts/run_tests_during_build.sh'" }))
+            using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"run -v {currentDirectory}:/app {dockerTag.completeTag} /bin/bash -c 'cd app/ubuntu.18.04 && ./scripts/run_tests_during_build.sh'" }))
             {
                 process.WaitForExit();
                 // This should output 0 as valid arguments supplied
@@ -172,7 +172,7 @@ Task("Push")
 {
     try
     {
-        Information("Releasing image " + dockerTag.completeVersion + " to Docker Hub");
+        Information("Releasing image " + dockerTag.completeTag + " to Docker Hub");
          using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"push {dockerTag.tag}" }))
         {
             process.WaitForExit();
