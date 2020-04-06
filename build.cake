@@ -134,7 +134,7 @@ Task("Build")
 {
     Information("Tags to be built:");
     dockerTag.Tags().ToList().ForEach((tag) => Information(tag));
-    DockerBuild(new DockerImageBuildSettings { Tag = dockerTag.Tags() }, "ubuntu.18.04");
+    DockerBuild(new DockerImageBuildSettings { Tag = dockerTag.Tags() }, dockerTag.operatingSystem);
 });
 
 Task("Test")
