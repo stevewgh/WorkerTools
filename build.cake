@@ -17,6 +17,7 @@ class OctopusDockerTag
     private GitVersion gitVersion;
 
     public OctopusDockerTag(GitVersion version, string operatingSystem) {
+
         this.dockerNamespace = "octopusdeploy/step-execution";
         this.gitVersion = version;
         this.operatingSystem = operatingSystem;
