@@ -132,9 +132,16 @@ Teardown(context =>
 Task("Build")
     .Does(() =>
 {
+
+    Information("Docker tags built:")
+    StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"image ls" })
+
     Information("Tags to be built:");
     dockerTag.Tags().ToList().ForEach((tag) => Information(tag));
     DockerBuild(new DockerImageBuildSettings { Tag = dockerTag.Tags() }, dockerTag.operatingSystem);
+
+    Information("Docker tags built:")
+    StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"image ls" })
 });
 
 Task("Test")
@@ -174,16 +181,19 @@ Task("Push")
     try
     {
         Information("Releasing image " + dockerTag.completeTag + " to Docker Hub");
-         using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"push {dockerTag.tag}" }))
-        {
-            process.WaitForExit();
-            // This should output 0 as valid arguments supplied
-            Information("Exit code: {0}", process.GetExitCode());
-            if (process.GetExitCode() > 0)
+        dockerTag.Tags().ToList().ForEach((tag) => {
+            using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"push {tag}" }))
             {
-                throw new Exception("Pushing docker image failed");
+                process.WaitForExit();
+                // This should output 0 as valid arguments supplied
+                Information("Exit code: {0}", process.GetExitCode());
+                if (process.GetExitCode() > 0)
+                {
+                    throw new Exception("Pushing docker image failed");
+                }
             }
-        }
+        });
+
     } catch (Exception e)
     {
         Information(e);
