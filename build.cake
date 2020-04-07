@@ -133,15 +133,33 @@ Task("Build")
     .Does(() =>
 {
 
-    Information("Docker tags built:")
-    StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"image ls" })
+    Information("Docker images available:");
+    using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"image ls" }))
+    {
+        process.WaitForExit();
+        // This should output 0 as valid arguments supplied
+        Information("Exit code: {0}", process.GetExitCode());
+        if (process.GetExitCode() > 0)
+        {
+            throw new Exception("Tests exited with exit code grater than 0");
+        }
+    }
 
     Information("Tags to be built:");
     dockerTag.Tags().ToList().ForEach((tag) => Information(tag));
     DockerBuild(new DockerImageBuildSettings { Tag = dockerTag.Tags() }, dockerTag.operatingSystem);
 
-    Information("Docker tags built:")
-    StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"image ls" })
+    Information("Docker tags available:");
+    using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"image ls" }))
+    {
+        process.WaitForExit();
+        // This should output 0 as valid arguments supplied
+        Information("Exit code: {0}", process.GetExitCode());
+        if (process.GetExitCode() > 0)
+        {
+            throw new Exception("Tests exited with exit code grater than 0");
+        }
+    }
 });
 
 Task("Test")
