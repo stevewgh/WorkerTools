@@ -17,11 +17,11 @@ class OctopusDockerTag
     private GitVersion gitVersion;
 
     public OctopusDockerTag(GitVersion version, string operatingSystem) {
+        this.dockerNamespace = "octopusdeploy/step-execution";
         this.gitVersion = version;
         this.operatingSystem = operatingSystem;
         this.version =  $"{gitVersion.Major}.{gitVersion.Minor}.{gitVersion.Patch}";
         this.tag = $"{version}-{operatingSystem}";
-        this.dockerNamespace = "octopusdeploy/step-execution-container";
         this.completeTag = $"{this.dockerNamespace}:{this.version}-{this.operatingSystem}";
     }
 
