@@ -17,12 +17,12 @@ end
 
 describe command('az --version') do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/2.2.0/) }
+  its(:stdout) { should contain(/2.3.1/) }
 end
 
 describe command('aws --version') do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/1.18.31/) }
+  its(:stdout) { should contain(/1.18/) }
 end
 
 describe command('node --version') do
@@ -59,6 +59,6 @@ end
 
 describe command("gcloud --version") do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/286.0.0/)}
+  its(:stdout) { should contain(/2020/)}
 end
 

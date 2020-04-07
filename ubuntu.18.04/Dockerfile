@@ -2,15 +2,15 @@ FROM ubuntu:18.04
 
 # get `wget` & software-properties-common
 # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#ubuntu-1804
-RUN apt-get update && \ 
-    apt-get install -y wget unzip apt-utils curl && \ 
-    apt-get install -y software-properties-common 
+RUN apt-get update && \
+    apt-get install -y wget unzip apt-utils curl && \
+    apt-get install -y software-properties-common
 # get powershell for 18.04
 RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && \
     add-apt-repository universe && \
-    apt-get install -y powershell 
+    apt-get install -y powershell
 
 # Get AZ Powershell core modules
 # https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.6.1
@@ -65,12 +65,12 @@ RUN apt-get install -y python3-pip groff
 
 # Get AWS CLI
 # https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html#install-linux-awscli
-RUN pip3 install awscli --upgrade
+RUN pip3 install "awscli>=1.18.0,<=1.19.0"  --upgrade
 
 # Install Ruby
 # https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-16-04
 RUN apt-get install autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm5 libgdbm-dev git -y && \
-    git clone https://github.com/sstephenson/rbenv.git /root/.rbenv && \ 
+    git clone https://github.com/sstephenson/rbenv.git /root/.rbenv && \
     git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build && \
     ./root/.rbenv/plugins/ruby-build/install.sh
 ENV PATH /root/.rbenv/bin:$PATH
