@@ -155,7 +155,7 @@ Task("Test")
                 Information("Exit code: {0}", process.GetExitCode());
                 if (process.GetExitCode() > 0)
                 {
-                    throw new Exception("Tests exited with exit code grater than 0");
+                    throw new Exception("Tests exited with exit code greater than 0");
                 }
             }
         }

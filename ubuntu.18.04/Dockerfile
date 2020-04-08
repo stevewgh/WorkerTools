@@ -2,9 +2,19 @@ FROM ubuntu:18.04
 
 # get `wget` & software-properties-common
 # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#ubuntu-1804
+RUN apt-get update && \ 
+    apt-get install -y wget unzip apt-utils curl && \ 
+    apt-get install -y software-properties-common 
+
+# Get Octo CLI
+# https://octopus.com/downloads/octopuscli#linux
 RUN apt-get update && \
-    apt-get install -y wget unzip apt-utils curl && \
-    apt-get install -y software-properties-common
+    apt-get install -y --no-install-recommends gnupg curl ca-certificates apt-transport-https && \
+    curl -sSfL https://apt.octopus.com/public.key | apt-key add - && \
+    sh -c "echo deb https://apt.octopus.com/ stable main > /etc/apt/sources.list.d/octopus.com.list" && \
+    apt-get update && \
+    apt-get install -y octopuscli=7.3.2
+
 # get powershell for 18.04
 RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
@@ -27,7 +37,7 @@ RUN apt-get install -y apt-transport-https && \
 
 # Get JDK
 # https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-on-ubuntu-18-04
-RUN apt install -y default-jdk
+RUN apt-get install -y default-jdk
 
 # Get Azure CLI
 # https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt?view=azure-cli-latest
