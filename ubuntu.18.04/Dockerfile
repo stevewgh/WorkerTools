@@ -13,7 +13,7 @@ RUN apt-get update && \
     curl -sSfL https://apt.octopus.com/public.key | apt-key add - && \
     sh -c "echo deb https://apt.octopus.com/ stable main > /etc/apt/sources.list.d/octopus.com.list" && \
     apt-get update && \
-    apt-get install -y octopuscli
+    apt-get install -y octopuscli=7.3.2
 
 # get powershell for 18.04
 RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb && \
