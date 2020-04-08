@@ -62,3 +62,8 @@ describe command("gcloud --version") do
   its(:stdout) { should contain(/2020/)}
 end
 
+describe command("octo --version") do
+  its(:exit_status) { should eq(0) }
+  its(:stdout) { should contain(/7.3.2/)}
+end
+
