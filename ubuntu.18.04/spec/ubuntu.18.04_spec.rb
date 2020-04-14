@@ -32,7 +32,7 @@ end
 
 describe command('node --version') do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/v12.16.1/) }
+  its(:stdout) { should contain(/v12.16.2/) }
 end
 
 describe command('kubectl version') do

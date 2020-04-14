@@ -1,10 +1,10 @@
 FROM ubuntu:18.04
 
-ARG Powershell_Version=7.0.0-1.ubuntu.18.04
+ARG Powershell_Version=7.0.0\*
 ARG Octopus_Cli_Version=7.3.2
 ARG Octopus_Client_Version=8.4.0
 ARG Helm_Version=v3.0.2
-ARG Node_Version=12.16.1
+ARG Node_Version=12.16.2\*
 ARG Kubectl_Version=1.11.1-00
 ARG Terraform_Version=0.12.24
 ARG Ruby_Version=2.7.0
