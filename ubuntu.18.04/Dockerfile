@@ -1,10 +1,26 @@
 FROM ubuntu:18.04
 
+ARG Powershell_Version=7.0.0\*
+ARG Octopus_Cli_Version=7.3.2
+ARG Octopus_Client_Version=8.4.0
+ARG Helm_Version=v3.0.2
+ARG Node_Version=12.16.2\*
+ARG Kubectl_Version=1.11.1-00
+ARG Terraform_Version=0.12.24
+ARG Ruby_Version=2.7.0
+
 # get `wget` & software-properties-common
 # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#ubuntu-1804
 RUN apt-get update && \ 
     apt-get install -y wget unzip apt-utils curl && \ 
     apt-get install -y software-properties-common 
+
+# get powershell for 18.04
+RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb && \
+    dpkg -i packages-microsoft-prod.deb && \
+    apt-get update && \
+    add-apt-repository universe && \
+    apt-get install -y powershell=${Powershell_Version}
 
 # Get Octo CLI
 # https://octopus.com/downloads/octopuscli#linux
@@ -13,21 +29,20 @@ RUN apt-get update && \
     curl -sSfL https://apt.octopus.com/public.key | apt-key add - && \
     sh -c "echo deb https://apt.octopus.com/ stable main > /etc/apt/sources.list.d/octopus.com.list" && \
     apt-get update && \
-    apt-get install -y octopuscli=7.3.2
+    apt-get install -y octopuscli=${Octopus_Cli_Version}
 
-# get powershell for 18.04
-RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    apt-get update && \
-    add-apt-repository universe && \
-    apt-get install -y powershell
+# Install Octopus Client
+# https://octopus.com/docs/octopus-rest-api/octopus.client
+RUN pwsh -c 'Install-Package -Force Octopus.Client -MinimumVersion ${Octopus_Client_Version} -MaximumVersion ${Octopus_Client_Version} -source https://www.nuget.org/api/v2 -SkipDependencies' && \
+    octopusClientPackagePath=$(pwsh -c '(Get-Item ((Get-Package Octopus.Client).source)).Directory.FullName') && \
+    cp -r $octopusClientPackagePath/lib/netstandard2.0/* .
 
 # Get AZ Powershell core modules
 # https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.6.1
 RUN pwsh -c 'Install-Module -Force -Name Az -AllowClobber -Scope AllUsers'
 
 # Get Helm3
-RUN wget --quiet -O - https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash -s -- -v v3.0.2
+RUN wget --quiet -O - https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash -s -- -v ${Helm_Version}
 
 # Get .NET SDK 3.1
 # https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-ubuntu-1804
@@ -49,18 +64,18 @@ RUN apt-get update && \
 # Get NodeJS
 # https://websiteforstudents.com/how-to-install-node-js-10-11-12-on-ubuntu-16-04-18-04-via-apt-and-snap/\
 RUN wget --quiet -O - https://deb.nodesource.com/setup_12.x | bash && \
-    apt-get install -y nodejs
+    apt-get install -y nodejs=${Node_Version}
 
 # Get Kubectl
 # https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-using-native-package-management
 RUN wget --quiet -O - https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 RUN echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
-RUN apt-get update && apt-get install -y kubectl=1.11.1-00
+RUN apt-get update && apt-get install -y kubectl=${Kubectl_Version}
 
 # Get Terraform
 # https://computingforgeeks.com/how-to-install-terraform-on-ubuntu-centos-7/
-RUN wget https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip && \
-    unzip terraform_0.12.24_linux_amd64.zip && \
+RUN wget https://releases.hashicorp.com/terraform/${Terraform_Version}/terraform_${Terraform_Version}_linux_amd64.zip && \
+    unzip terraform_${Terraform_Version}_linux_amd64.zip && \
     mv terraform /usr/local/bin
 
 # Install Google Cloud CLI
@@ -85,4 +100,4 @@ RUN apt-get install autoconf bison build-essential libssl-dev libyaml-dev librea
     ./root/.rbenv/plugins/ruby-build/install.sh
 ENV PATH /root/.rbenv/bin:$PATH
 RUN echo 'eval "$(rbenv init -)"' >> ~/.bashrc && \
-    rbenv install 2.7.0 && rbenv global 2.7.0
+    rbenv install ${Ruby_Version} && rbenv global ${Ruby_Version}

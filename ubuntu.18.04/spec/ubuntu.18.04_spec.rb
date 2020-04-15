@@ -5,6 +5,11 @@ describe command('pwsh --version') do
   its(:stdout) { should contain(/PowerShell 7.0.0/) }
 end
 
+describe command("pwsh -c '[Reflection.AssemblyName]::GetAssemblyName(\"/Octopus.Client.dll\").Version.ToString()'") do
+  its(:exit_status) { should eq(0) }
+  its(:stdout) { should contain(/8.4.0.0/) }
+end
+
 describe command('dotnet --version') do
   its(:exit_status) { should eq(0) }
   its(:stdout) { should contain(/3.1.201/) }
@@ -27,7 +32,7 @@ end
 
 describe command('node --version') do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/v12.16.1/) }
+  its(:stdout) { should contain(/v12.16.2/) }
 end
 
 describe command('kubectl version') do
