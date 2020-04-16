@@ -21,7 +21,8 @@ Runs a build and test of the `ubuntu.18.04` container
 ```bash
 cd ubuntu.18.04
 docker build . -t worker-tools
-docker run -it -v `pwd`:/app worker-tools
+docker build . -t worker-tools-tests -f Tests.Dockerfile --build-arg ContainerUnderTest=worker-tools
+docker run -it -v `pwd`:/app worker-tools-tests
 ```
 
 Then within the running docker container
@@ -45,7 +46,8 @@ Runs a build and test of the `windows.ltsc2019` container
 ```powershell
 cd windows.ltsc2019
 docker build . -t worker-tools
-docker run -it -v ${pwd}:/app worker-tools
+docker build . -t worker-tools-tests -f Tests.Dockerfile --build-arg ContainerUnderTest=worker-tools
+docker run -it -v ${pwd}:/app worker-tools-tests
 ```
 
 Then within the running docker container

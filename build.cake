@@ -57,6 +57,7 @@ var imageDirectory = Argument("image-directory", "ubuntu.18.04");
 ///////////////////////////////////////////////////////////////////////////////
 GitVersion gitVersionInfo;
 OctopusDockerTag dockerTag;
+string testContainerName = "test-container";
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -133,6 +134,15 @@ Task("Build")
     dockerTag.Tags().ToList().ForEach((tag) => Information(tag));
     DockerBuild(new DockerImageBuildSettings { Tag = dockerTag.Tags() }, dockerTag.imageDirectory);
     
+    Information("Building test container {1} with ContainerUnderTest={0}", dockerTag.imageName, testContainerName);
+    DockerBuild(new DockerImageBuildSettings { 
+
+        File = $"{dockerTag.imageDirectory}\\Tests.Dockerfile", 
+        Tag = new string[] { testContainerName }, 
+        BuildArg = new string[] { 
+            $"ContainerUnderTest={dockerTag.imageName}"
+        } 
+    }, dockerTag.imageDirectory);
 });
 
 Task("Test")
@@ -142,8 +152,8 @@ Task("Test")
     var currentDirectory = MakeAbsolute(Directory("./"));
     try
     {
-        Information("Running tests against {0}", dockerTag.imageName);
-        using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"run -v {currentDirectory}:/app {dockerTag.imageName} bash -c \"cd ./app/{dockerTag.imageDirectory} && ./scripts/run_tests_during_build.sh\"" }))
+        Information("Running tests in {1} for {0}", dockerTag.imageName, testContainerName);
+        using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"run -v {currentDirectory}:/app {testContainerName} bash -c \"cd ./app/{dockerTag.imageDirectory} && ./scripts/run_tests_during_build.sh\"" }))
         {
             process.WaitForExit();
             // This should output 0 as valid arguments supplied
