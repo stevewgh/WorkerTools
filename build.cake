@@ -9,21 +9,20 @@ using Cake.Incubator.LoggingExtensions;
 
 class OctopusDockerTag
 {
-    public string operatingSystem { get; set; }
+    public string imageDirectory { get; set; }
     public string dockerNamespace { get; }
-    public string completeTag { get; }
+    public string imageName { get; }
     public string version { get; set; }
     public string tag { get; set; }
     private GitVersion gitVersion;
 
-    public OctopusDockerTag(GitVersion version, string operatingSystem) {
+    public OctopusDockerTag(GitVersion version, string dockerNamespace, string imageDirectory) {
 
-        this.dockerNamespace = "octopusdeploy/step-execution";
+        this.dockerNamespace = dockerNamespace;
         this.gitVersion = version;
-        this.operatingSystem = operatingSystem;
+        this.imageDirectory = imageDirectory;
         this.version =  $"{gitVersion.Major}.{gitVersion.Minor}.{gitVersion.Patch}";
-        this.tag = $"{version}-{operatingSystem}";
-        this.completeTag = $"{this.dockerNamespace}:{this.version}-{this.operatingSystem}";
+        this.imageName = this.CreateTag(this.version);
     }
 
     public string[] Tags() {
@@ -31,16 +30,14 @@ class OctopusDockerTag
             this.CreateTag("latest"),
             this.CreateTag(this.version),
             this.CreateTag(this.gitVersion.Major.ToString()),
-            this.CreateTag(new string[] { this.gitVersion.Major.ToString(), this.gitVersion.Minor.ToString() })
+            this.CreateTag($"{this.gitVersion.Major}.{this.gitVersion.Minor}")
         };
     }
 
-    private string CreateTag(string[] version) {
-        return $"{this.dockerNamespace}:{string.Join(".", version)}-{this.operatingSystem}";
-    }
-
     private string CreateTag(string version) {
-        return $"{this.dockerNamespace}:{version}-{this.operatingSystem}";
+        return (version == "latest") ?
+            $"{this.dockerNamespace}:{this.imageDirectory}" :
+            $"{this.dockerNamespace}:{string.Join(".", version)}-{this.imageDirectory}";
     }
 }
 
@@ -52,11 +49,12 @@ class OctopusDockerTag
 Context.Log.Verbosity = Argument("Verbosity", Verbosity.Normal);
 
 var target = Argument("target", "Default");
+var dockerNamespace = Argument("docker-namespace", "octopusdeploy/worker-tools");
+var imageDirectory = Argument("image-directory", "ubuntu.18.04");
 
 ///////////////////////////////////////////////////////////////////////////////
 // GLOBAL VARIABLES
 ///////////////////////////////////////////////////////////////////////////////
-string operatingSystem;
 GitVersion gitVersionInfo;
 OctopusDockerTag dockerTag;
 
@@ -76,8 +74,6 @@ Setup(context =>
         {
             if (IsRunningOnUnix())
             {
-                operatingSystem = "ubuntu.18.04";
-
                 using(var process = StartAndReturnProcess("xmlstarlet", new ProcessSettings{ Arguments = "edit -O --inplace --update \"//dllmap[@os='linux']/@target\" --value \"/lib64/libgit2.so.26\" tools/GitVersion.CommandLine.4.0.0/tools/LibGit2Sharp.dll.config" }))
                 {
                     process.WaitForExit();
@@ -93,8 +89,8 @@ Setup(context =>
             });
             Information("Informational Version {0}", gitVersionInfo.InformationalVersion);
             Verbose("GitVersion:\n{0}", gitVersionInfo.Dump());
-            Information("Building step-execution-container images v{0}", gitVersionInfo);
-            dockerTag = new OctopusDockerTag(gitVersionInfo, operatingSystem);
+            Information("Building {1} images v{0}", gitVersionInfo.SemVer, dockerNamespace);
+            dockerTag = new OctopusDockerTag(gitVersionInfo, dockerNamespace, imageDirectory);
         }
         catch (Exception e)
         {
@@ -114,7 +110,7 @@ Setup(context =>
     }
     else
     {
-        Information("Building step-execution-container images v{0}", gitVersionInfo);
+        Information("Building {1} images v{0}", gitVersionInfo.SemVer, dockerNamespace);
     }
 
     if (BuildSystem.IsRunningOnTeamCity)
@@ -135,7 +131,8 @@ Task("Build")
 {
     Information("Tags to be built:");
     dockerTag.Tags().ToList().ForEach((tag) => Information(tag));
-    DockerBuild(new DockerImageBuildSettings { Tag = dockerTag.Tags() }, dockerTag.operatingSystem);
+    DockerBuild(new DockerImageBuildSettings { Tag = dockerTag.Tags() }, dockerTag.imageDirectory);
+    
 });
 
 Task("Test")
@@ -143,27 +140,24 @@ Task("Test")
     .Does(() =>
 {
     var currentDirectory = MakeAbsolute(Directory("./"));
-    if (IsRunningOnUnix())
+    try
     {
-        try
+        Information("Running tests against {0}", dockerTag.imageName);
+        using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"run -v {currentDirectory}:/app {dockerTag.imageName} bash -c \"cd ./app/{dockerTag.imageDirectory} && ./scripts/run_tests_during_build.sh\"" }))
         {
-            Information($"Running tests against {dockerTag.completeTag}");
-            using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"run -v {currentDirectory}:/app {dockerTag.completeTag} /bin/bash -c 'cd app/ubuntu.18.04 && ./scripts/run_tests_during_build.sh'" }))
+            process.WaitForExit();
+            // This should output 0 as valid arguments supplied
+            Information("Exit code: {0}", process.GetExitCode());
+            if (process.GetExitCode() > 0)
             {
-                process.WaitForExit();
-                // This should output 0 as valid arguments supplied
-                Information("Exit code: {0}", process.GetExitCode());
-                if (process.GetExitCode() > 0)
-                {
-                    throw new Exception("Tests exited with exit code greater than 0");
-                }
+                throw new Exception("Tests exited with exit code greater than 0");
             }
         }
-        catch (Exception e)
-        {
-            Information(e);
-            throw; // rethrow the exception so cake will fail
-        }
+    }
+    catch (Exception e)
+    {
+        Information(e);
+        throw; // rethrow the exception so cake will fail
     }
 });
 

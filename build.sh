@@ -27,6 +27,8 @@ SCRIPT="build.cake"
 TARGET="Default"
 CONFIGURATION="Release"
 VERBOSITY="verbose"
+IMAGEDIRECTORY="ubuntu.18.04"
+DOCKERNAMESPACE="octopusdeploy/worker-tools"
 DRYRUN=
 SHOW_VERSION=false
 SCRIPT_ARGUMENTS=()
@@ -38,6 +40,8 @@ for i in "$@"; do
         -t|--target) TARGET="$2"; shift ;;
         -c|--configuration) CONFIGURATION="$2"; shift ;;
         -v|--verbosity) VERBOSITY="$2"; shift ;;
+        -id|--image-directory) IMAGEDIRECTORY="$2"; shift ;;
+        -dn|--docker-namespace) DOCKERNAMESPACE="$2"; shift ;;
         -d|--dryrun) DRYRUN="-dryrun" ;;
         --version) SHOW_VERSION=true ;;
         --) shift; SCRIPT_ARGUMENTS+=("$@"); break ;;
