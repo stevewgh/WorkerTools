@@ -7,7 +7,6 @@ ARG Helm_Version=v3.0.2
 ARG Node_Version=12.16.2\*
 ARG Kubectl_Version=1.11.1-00
 ARG Terraform_Version=0.12.24
-ARG Ruby_Version=2.7.0
 
 # get `wget` & software-properties-common
 # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#ubuntu-1804
@@ -91,13 +90,3 @@ RUN apt-get install -y python3-pip groff
 # Get AWS CLI
 # https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html#install-linux-awscli
 RUN pip3 install "awscli>=1.18.0,<=1.19.0"  --upgrade
-
-# Install Ruby
-# https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-16-04
-RUN apt-get install autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm5 libgdbm-dev git -y && \
-    git clone https://github.com/sstephenson/rbenv.git /root/.rbenv && \
-    git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build && \
-    ./root/.rbenv/plugins/ruby-build/install.sh
-ENV PATH /root/.rbenv/bin:$PATH
-RUN echo 'eval "$(rbenv init -)"' >> ~/.bashrc && \
-    rbenv install ${Ruby_Version} && rbenv global ${Ruby_Version}
