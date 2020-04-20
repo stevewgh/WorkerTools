@@ -153,7 +153,20 @@ Task("Test")
     try
     {
         Information("Running tests in {1} for {0}", dockerTag.imageName, testContainerName);
-        using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"run -v {currentDirectory}:/app {testContainerName} bash -c \"cd ./app/{dockerTag.imageDirectory} && ./scripts/run_tests_during_build.sh\"" }))
+
+        ProcessSettings processSettings;
+
+        if (IsRunningOnUnix()) {
+            processSettings = new ProcessSettings{
+                Arguments = $"run -v {currentDirectory}:/app {testContainerName} bash -c \"cd ./app/{dockerTag  .imageDirectory} && ./scripts/run_tests_during_build.sh\""
+            };
+        } else {
+            processSettings = new ProcessSettings{ 
+                Arguments = $"run -v {currentDirectory}:C:\\app {testContainerName} powershell -Command \"cd app; Invoke-Pester spec\\{dockerTag.imageDirectory}* -EnableExit\"" 
+            };
+        }
+
+        using(var process = StartAndReturnProcess("docker", processSettings))
         {
             process.WaitForExit();
             // This should output 0 as valid arguments supplied
