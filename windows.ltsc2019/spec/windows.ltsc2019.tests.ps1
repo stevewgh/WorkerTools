@@ -27,9 +27,9 @@ Describe  'installed dependencies' {
     #     az --version | Should Contain 'x.y.z'
     # }
 
-    # It 'aws is installed' {
-    #     aws --version | Should Contain 'x.y.z'
-    # }
+    It 'aws is installed' {
+      Get-AWSPowerShellVersion | Should Contain '4.0.5'
+    }
 
     # It 'node is installed' {
     #     node --version | Should Contain 'x.y.z'

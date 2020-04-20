@@ -22,7 +22,8 @@ RUN Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\Azur
 
 # # Install AWS CLI
 # # https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-set-up-windows.html#ps-installing-awspowershellnetcore
-# RUN Install-Module -name AWSPowerShell.NetCore
+RUN Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+RUN Install-Module -name AWSPowerShell.NetCore -RequiredVersion 4.0.5 -Force
 
 # # Install NodeJS
 # RUN Invoke-WebRequest "https://nodejs.org/dist/latest-v12.x/node-v12.16.1-x64.msi" -OutFile node-v12.16.1.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I node-v12.16.1.msi /quiet'; rm .\nodev12.16.1.msi
