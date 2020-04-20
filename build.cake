@@ -158,11 +158,11 @@ Task("Test")
 
         if (IsRunningOnUnix()) {
             processSettings = new ProcessSettings{
-                Arguments = $"run -v {currentDirectory}:/app {testContainerName} bash -c \"cd ./app/{dockerTag  .imageDirectory} && ./scripts/run_tests_during_build.sh\""
+                Arguments = $"run -v {currentDirectory}:/app {testContainerName} bash -c \"cd ./app/{dockerTag.imageDirectory} && ./scripts/run_tests_during_build.sh\""
             };
         } else {
             processSettings = new ProcessSettings{ 
-                Arguments = $"run -v {currentDirectory}:C:\\app {testContainerName} powershell -Command \"cd app; Invoke-Pester spec\\{dockerTag.imageDirectory}* -EnableExit\"" 
+                Arguments = $"run -v {currentDirectory}:C:\\app {testContainerName} powershell -Command \"cd app\{dockerTag.imageDirectory}; Invoke-Pester spec\\{dockerTag.imageDirectory}* -EnableExit\"" 
             };
         }
 
