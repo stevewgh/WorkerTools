@@ -32,7 +32,7 @@ RUN apt-get update && \
 
 # Install Octopus Client
 # https://octopus.com/docs/octopus-rest-api/octopus.client
-RUN pwsh -c 'Install-Package -Force Octopus.Client -MaximumVersion ${Octopus_Client_Version} -source https://www.nuget.org/api/v2 -SkipDependencies' && \
+RUN pwsh -c 'Install-Package -Force Octopus.Client -MaximumVersion "'${Octopus_Client_Version}'" -source https://www.nuget.org/api/v2 -SkipDependencies' && \
     octopusClientPackagePath=$(pwsh -c '(Get-Item ((Get-Package Octopus.Client).source)).Directory.FullName') && \
     cp -r $octopusClientPackagePath/lib/netstandard2.0/* .
 
