@@ -135,14 +135,19 @@ Task("Build")
     DockerBuild(new DockerImageBuildSettings { Tag = dockerTag.Tags() }, dockerTag.imageDirectory);
 
     Information("Building test container {1} with ContainerUnderTest={0}", dockerTag.imageName, testContainerName);
-    DockerBuild(new DockerImageBuildSettings {
 
-        File = $"{dockerTag.imageDirectory}\\Tests.Dockerfile",
-        Tag = new string[] { testContainerName },
-        BuildArg = new string[] {
-            $"ContainerUnderTest={dockerTag.imageName}"
-        }
-    }, dockerTag.imageDirectory);
+    var buildSettings = new DockerImageBuildSettings {
+        Tag = new string[] { testContainerName }, 
+        BuildArg = new string[] {  $"ContainerUnderTest={dockerTag.imageName}" }
+    };
+
+    if (IsRunningOnUnix()) {
+        buildSettings.File = $"{dockerTag.imageDirectory}/Tests.Dockerfile";
+    } else {
+        buildSettings.File = $"{dockerTag.imageDirectory}\\Tests.Dockerfile";
+    }
+
+    DockerBuild(buildSettings, dockerTag.imageDirectory);
 });
 
 Task("Test")
