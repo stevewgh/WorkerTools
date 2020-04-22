@@ -28,7 +28,7 @@ RUN Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 RUN Install-Module -name AWSPowerShell.NetCore -RequiredVersion 4.0.5 -Force
 
 # # Install NodeJS
-RUN Invoke-WebRequest "https://nodejs.org/dist/latest-v12.x/node-v12.16.2-x64.msi" -OutFile node-v12.16.1.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I node-v12.16.2.msi /quiet';
+RUN choco install nodejs-lts -y --version 12.16.2
 
 # # Install kubectl
 RUN Invoke-WebRequest "https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/windows/amd64/kubectl.exe" -OutFile .\kubectl.exe;  mv .\kubectl.exe C:\Windows\system32\;
@@ -51,7 +51,7 @@ RUN Invoke-WebRequest "https://dl.google.com/dl/cloudsdk/channels/rapid/download
 
 # # UNZIP AND INSTALL gcloud
 ADD .\scripts\update_path.cmd C:\update_path.cmd
-RUN  & '.\Program Files\7-Zip\7z.exe' x .\google-cloud-sdk-289.0.0-windows-x86_64.zip; .\google-cloud-sdk\install.bat --quiet; .\update_path.cmd; rm .\google-cloud-sdk-289.0.0-windows-x86_64.zip
+RUN  & '.\Program Files\7-Zip\7z.exe' x .\google-cloud-sdk-289.0.0-windows-x86_64.zip; .\google-cloud-sdk\install.bat --quiet; rm .\google-cloud-sdk-289.0.0-windows-x86_64.zip
 
 # # Install ScriptCS
 RUN choco install scriptcs -y --version 0.17.1
@@ -60,10 +60,8 @@ RUN choco install scriptcs -y --version 0.17.1
 RUN choco install octopustools -y --version 7.3.4
 
 # # Install Octopus Client
-RUN Install-Package Octopus.Client -source https://www.nuget.org/api/v2 -SkipDependencies -Force
-RUN $path = Join-Path (Get-Item ((Get-Package Octopus.Client).source)).Directory.FullName "lib/net452/Octopus.Client.dll"; Add-Type -Path $path
+RUN Install-Package Octopus.Client -source https://www.nuget.org/api/v2 -SkipDependencies -Force -RequiredVersion 8.4.2
+RUN $path = Join-Path (Get-Item ((Get-Package Octopus.Client).source)).Directory.FullName "lib/net452/Octopus.Client.dll"; Add-Type -Path $path; echo $path;
 
-# # Install F#
-ADD .\scripts\dotnet-install.ps1 C:\dotnet-install.ps1
-
-
+# # Update path for new tools
+RUN .\update_path.cmd;
