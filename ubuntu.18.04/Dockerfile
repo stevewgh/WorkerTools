@@ -3,6 +3,7 @@ FROM ubuntu:18.04
 ARG Powershell_Version=7.0.0\*
 ARG Octopus_Cli_Version=7.3.2
 ARG Octopus_Client_Version=8.4.0
+ARG Azure_Powershell_Version=2.3.1
 ARG Helm_Version=v3.0.2
 ARG Node_Version=12.16.2\*
 ARG Kubectl_Version=1.11.1-00
@@ -38,7 +39,7 @@ RUN pwsh -c 'Install-Package -Force Octopus.Client -MaximumVersion "'${Octopus_C
 
 # Get AZ Powershell core modules
 # https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.6.1
-RUN pwsh -c 'Install-Module -Force -Name Az -AllowClobber -Scope AllUsers'
+RUN pwsh -c 'Install-Module -Force -Name Az -AllowClobber -Scope AllUsers -MaximumVersion "'${Azure_Powershell_Version}'"'
 
 # Get Helm3
 RUN wget --quiet -O - https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash -s -- -v ${Helm_Version}
