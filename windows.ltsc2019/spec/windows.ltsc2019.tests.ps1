@@ -35,25 +35,21 @@ Describe  'installed dependencies' {
     #     node --version | Should Contain 'x.y.z'
     # }
 
-    # It 'kubectl is installed' {
-    #     kubectl version | Should Contain 'x.y.z'
-    # }
+    It 'kubectl is installed' {
+        kubectl version --client | Should Contain '1.18.0'
+    }
 
-    # It 'helm is installed' {
-    #     helm version | Should Contain 'x.y.z'
-    # }
+    It 'helm is installed' {
+        helm version | Should Contain 'v3.1.2'
+    }
 
-    # It 'terraform is installed' {
-    #     terraform version | Should Contain 'x.y.z'
-    # }
+    It 'terraform is installed' {
+        terraform version | Should Contain 'x.y.z'
+    }
 
-    # It 'python is installed' {
-    #     python --version | Should Contain 'x.y.z'
-    # }
-
-    # It 'python3 is installed' {
-    #     python3 --version | Should Contain 'x.y.z'
-    # }
+    It 'python is installed' {
+        python --version | Should Contain '3.8.2'
+    }
 
     # It 'gcloud is installed' {
     #     gcloud --version | Should Contain 'x.y.z'
