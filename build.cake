@@ -133,15 +133,15 @@ Task("Build")
     Information("Tags to be built:");
     dockerTag.Tags().ToList().ForEach((tag) => Information(tag));
     DockerBuild(new DockerImageBuildSettings { Tag = dockerTag.Tags() }, dockerTag.imageDirectory);
-    
-    Information("Building test container {1} with ContainerUnderTest={0}", dockerTag.imageName, testContainerName);
-    DockerBuild(new DockerImageBuildSettings { 
 
-        File = $"{dockerTag.imageDirectory}\\Tests.Dockerfile", 
-        Tag = new string[] { testContainerName }, 
-        BuildArg = new string[] { 
+    Information("Building test container {1} with ContainerUnderTest={0}", dockerTag.imageName, testContainerName);
+    DockerBuild(new DockerImageBuildSettings {
+
+        File = $"{dockerTag.imageDirectory}\\Tests.Dockerfile",
+        Tag = new string[] { testContainerName },
+        BuildArg = new string[] {
             $"ContainerUnderTest={dockerTag.imageName}"
-        } 
+        }
     }, dockerTag.imageDirectory);
 });
 
@@ -161,8 +161,10 @@ Task("Test")
                 Arguments = $"run -v {currentDirectory}:/app {testContainerName} bash -c \"cd ./app/{dockerTag.imageDirectory} && ./scripts/run_tests_during_build.sh\""
             };
         } else {
-            processSettings = new ProcessSettings{ 
-                Arguments = $"run -v {currentDirectory}:C:\\app {testContainerName} powershell -Command \"cd app\{dockerTag.imageDirectory}; Invoke-Pester spec\\{dockerTag.imageDirectory}* -EnableExit\"" 
+            var specPath = "spec\\";
+            var appPath ="app\\";
+            processSettings = new ProcessSettings{
+                Arguments = $"run -v {currentDirectory}:C:\\app {testContainerName} powershell -Command \"cd {appPath}{dockerTag.imageDirectory}; Invoke-Pester {specPath}{dockerTag.imageDirectory}* -EnableExit\""
             };
         }
 
