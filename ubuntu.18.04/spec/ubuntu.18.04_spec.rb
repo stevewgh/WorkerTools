@@ -17,12 +17,12 @@ end
 
 describe command('java --version') do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/11.0.6/) }
+  its(:stdout) { should contain(/11.0.7/) }
 end
 
 describe command('az --version') do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/2.3.1/) }
+  its(:stdout) { should contain(/2.4.0/) }
 end
 
 describe command('aws --version') do

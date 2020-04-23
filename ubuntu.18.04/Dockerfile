@@ -3,6 +3,8 @@ FROM ubuntu:18.04
 ARG Powershell_Version=7.0.0\*
 ARG Octopus_Cli_Version=7.3.2
 ARG Octopus_Client_Version=8.4.0
+ARG Azure_Cli_Version=2.4.0\*
+ARG Azure_Powershell_Version=2.2.0
 ARG Helm_Version=v3.0.2
 ARG Node_Version=12.16.2\*
 ARG Kubectl_Version=1.11.1-00
@@ -38,7 +40,7 @@ RUN pwsh -c 'Install-Package -Force Octopus.Client -MaximumVersion "'${Octopus_C
 
 # Get AZ Powershell core modules
 # https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.6.1
-RUN pwsh -c 'Install-Module -Force -Name Az -AllowClobber -Scope AllUsers'
+RUN pwsh -c 'Install-Module -Force -Name Az -AllowClobber -Scope AllUsers -MaximumVersion "'${Azure_Powershell_Version}'"'
 
 # Get Helm3
 RUN wget --quiet -O - https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash -s -- -v ${Helm_Version}
@@ -58,7 +60,7 @@ RUN apt-get install -y default-jdk
 RUN wget --quiet -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ bionic main" | tee /etc/apt/sources.list.d/azure-cli.list
 RUN apt-get update && \
-    apt-get install -y azure-cli
+    apt-get install -y azure-cli=${Azure_Cli_Version}
 
 # Get NodeJS
 # https://websiteforstudents.com/how-to-install-node-js-10-11-12-on-ubuntu-16-04-18-04-via-apt-and-snap/\
