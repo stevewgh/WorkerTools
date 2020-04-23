@@ -19,7 +19,6 @@ Describe  'installed dependencies' {
         dotnet --version | Should Contain '3.1.201'
     }
 
-
     It 'has java is installed' {
         java --version | Should Contain '14+36-1461'
     }

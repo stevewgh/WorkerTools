@@ -137,7 +137,7 @@ Task("Build")
     Information("Building test container {1} with ContainerUnderTest={0}", dockerTag.imageName, testContainerName);
 
     var buildSettings = new DockerImageBuildSettings {
-        Tag = new string[] { testContainerName }, 
+        Tag = new string[] { testContainerName },
         BuildArg = new string[] {  $"ContainerUnderTest={dockerTag.imageName}" }
     };
 
