@@ -55,6 +55,7 @@ var imageDirectory = Argument("image-directory", "ubuntu.18.04");
 ///////////////////////////////////////////////////////////////////////////////
 // GLOBAL VARIABLES
 ///////////////////////////////////////////////////////////////////////////////
+
 GitVersion gitVersionInfo;
 OctopusDockerTag dockerTag;
 string testContainerName = "test-container";
@@ -62,6 +63,7 @@ string testContainerName = "test-container";
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
 ///////////////////////////////////////////////////////////////////////////////
+
 Setup(context =>
 {
     var fromEnv = context.EnvironmentVariable("GitVersion.semVer");
@@ -133,11 +135,11 @@ Task("Build")
     Information("Tags to be built:");
     dockerTag.Tags().ToList().ForEach((tag) => Information(tag));
     DockerBuild(new DockerImageBuildSettings { Tag = dockerTag.Tags() }, dockerTag.imageDirectory);
-    
+
     Information("Building test container {1} with ContainerUnderTest={0}", dockerTag.imageName, testContainerName);
 
     var buildSettings = new DockerImageBuildSettings {
-        Tag = new string[] { testContainerName }, 
+        Tag = new string[] { testContainerName },
         BuildArg = new string[] {  $"ContainerUnderTest={dockerTag.imageName}" }
     };
 
@@ -158,7 +160,22 @@ Task("Test")
     try
     {
         Information("Running tests in {1} for {0}", dockerTag.imageName, testContainerName);
-        using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"run -v {currentDirectory}:/app {testContainerName} bash -c \"cd ./app/{dockerTag.imageDirectory} && ./scripts/run_tests_during_build.sh\"" }))
+
+        ProcessSettings processSettings;
+
+        if (IsRunningOnUnix()) {
+            processSettings = new ProcessSettings{
+                Arguments = $"run -v {currentDirectory}:/app {testContainerName} bash -c \"cd ./app/{dockerTag.imageDirectory} && ./scripts/run_tests_during_build.sh\""
+            };
+        } else {
+            var specPath = "spec\\";
+            var appPath ="app\\";
+            processSettings = new ProcessSettings{
+                Arguments = $"run -v {currentDirectory}:C:\\app {testContainerName} powershell -Command \"cd {appPath}{dockerTag.imageDirectory}; Invoke-Pester {specPath}{dockerTag.imageDirectory}* -EnableExit\""
+            };
+        }
+
+        using(var process = StartAndReturnProcess("docker", processSettings))
         {
             process.WaitForExit();
             // This should output 0 as valid arguments supplied
