@@ -1,17 +1,21 @@
 # Worker Tools
 Officially sanctioned worker images for Octopus Deploy available on [docker hub](https://hub.docker.com/r/octopusdeploy/worker-tools)
 
-# Testing
+## How to Use the Image
+
+See the docs to get started using a worker-tools image as an [execution container for workers](https://octopus.com/docs/deployment-process/execution-containers-for-workers).
+
+## Testing
 
 To run these tests, you can see the instructions for [Ubuntu](#Ubuntu) and [Windows](#Windows)
 
 N.B. all commands below should be run from the project root directory.
 
-## Ubuntu
+### Ubuntu
 
 Our tests are implemented in `serverspec`, which relies on `ruby` and `rspec`. 
 
-### Option 1: Build and Test scripts
+#### Option 1: Build and Test scripts
 
 ```bash
 ./build.sh --image-directory=`ubuntu.18.04`
@@ -19,7 +23,7 @@ Our tests are implemented in `serverspec`, which relies on `ruby` and `rspec`.
 
 Runs a build and test of the `ubuntu.18.04` container
 
-### Option 2: DIY
+#### Option 2: DIY
 
 ```bash
 cd ubuntu.18.04
@@ -34,9 +38,9 @@ Then within the running docker container
 cd app && bundle install && bundle exec rspec
 ```
 
-## Windows
+### Windows
 
-### Option 1: Build and Test scripts
+#### Option 1: Build and Test scripts
 
 ```powershell
 build.ps1 -image-directory 'windows.ltsc2019'
@@ -44,7 +48,7 @@ build.ps1 -image-directory 'windows.ltsc2019'
 
 Runs a build and test of the `windows.ltsc2019` container
 
-### Option 2: DIY
+#### Option 2: DIY
 
 ```powershell
 cd windows.ltsc2019
