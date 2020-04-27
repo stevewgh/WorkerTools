@@ -1,12 +1,15 @@
-# Step Execution Container
-Officially sanctioned worker images for Octopus Deploy
+# Worker Tools
+Officially sanctioned worker images for Octopus Deploy available on [docker hub](https://hub.docker.com/r/octopusdeploy/worker-tools)
 
 # Testing
-Our tests are implemented in `serverspec`, which relys on `ruby` and `rspec`. To run these tests, you can see the instructions for [Ubuntu](#Ubuntu) and [Windows](#Windows)
+
+To run these tests, you can see the instructions for [Ubuntu](#Ubuntu) and [Windows](#Windows)
 
 N.B. all commands below should be run from the project root directory.
 
 ## Ubuntu
+
+Our tests are implemented in `serverspec`, which relies on `ruby` and `rspec`. 
 
 ### Option 1: Build and Test scripts
 
@@ -53,7 +56,6 @@ docker run -it -v ${pwd}:/app worker-tools-tests
 Then within the running docker container
 
 ```powershell
-cd app 
-bundle install 
-bundle exec rspec
+cd app\windows.ltsc2019 
+Invoke-Pester spec\windows.ltsc2019* -EnableExit
 ```
