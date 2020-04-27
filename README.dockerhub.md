@@ -12,11 +12,6 @@ Pick an image that is suitable for your needs based on:
 - OS + distribution
 
 The worker tools images have multiple release tracks, based on how you would like to receive updates as they're pushed to docker hub.
-- Major
-- Major.Minor
-- Major.Minor.Patch
-
-If the operating system on your worker is Linux, you can use any of the following images: 
 
 Release Track  | Windows | Ubuntu
 ---------| --------------- | ---
