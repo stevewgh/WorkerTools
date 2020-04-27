@@ -1,5 +1,3 @@
-# Featured Tags
-
 # About This Image
 
 These images include common tools used for octopus steps and are recommended to use when setting up [execution containers for workers](https://octopus.com/docs/deployment-process/execution-containers-for-workers).
