@@ -2,18 +2,35 @@
 
 # About This Image
 
-TODO: describe the purpose of this image
+These images include common tools used for octopus steps and are recommended to use when setting up [execution containers for workers](https://octopus.com/docs/deployment-process/execution-containers-for-workers).
+
+For an Octopus deployment [step](https://octopus.com/docs/deployment-process/steps) running on a [worker](https://octopus.com/docs/infrastructure/workers) or on [Octopus Server](https://octopus.com/docs/infrastructure/workers/built-in-worker) that you define in your [deployment processes](https://octopus.com/docs/deployment-process), you can select a container for the step's execution.
 
 # How to Use the Image
 
-TODO: Link to octopus docs
+Pick an image that is suitable for your needs based on:
+- OS + distribution
+
+The worker tools images have multiple release tracks, based on how you would like to receive updates as they're pushed to docker hub.
+- Major
+- Major.Minor
+- Major.Minor.Patch
+
+If the operating system on your worker is Linux, you can use any of the following images: 
+
+Release Track  | Windows | Ubuntu
+---------| --------------- | ---
+latest | ubuntu.18.04 | windows.ltsc2019
+Major | 1-ubuntu.18.04 | 1-windows.ltsc2019
+Major.Minor | 1.0-ubuntu.18.04 | 1.0-windows.ltsc2019
+Major.Minor.Patch | 1.0.1-ubuntu.18.04 | 1.0.1-windows.ltsc2019
 
 # Full Tag Listing
 
 ## Windows Server 2019 amd64 Tags
 Tag | Dockerfile
 ---------| ---------------
-windows.ltsc2019, latest | [Dockerfile](https://github.com/OctopusDeploy/WorkerTools/blob/master/windows.ltsc2019/Dockerfile)
+windows.ltsc2019 | [Dockerfile](https://github.com/OctopusDeploy/WorkerTools/blob/master/windows.ltsc2019/Dockerfile)
 
 ## Ubuntu Tags
 Tag | Dockerfile
@@ -21,12 +38,3 @@ Tag | Dockerfile
 ubuntu.18.04 | [Dockerfile](https://github.com/OctopusDeploy/WorkerTools/blob/master/ubuntu.18.04/Dockerfile)
 
 You can retrieve a list of all available tags for octopusdeploy/worker-tools at https://hub.docker.com/v2/repositories/octopusdeploy/worker-tools/tags.
-
-# Support
-
-# Image Update Policy
-
-# Feedback
-
-# License
-
