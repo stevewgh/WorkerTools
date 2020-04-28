@@ -11,12 +11,12 @@ Pick an image that is suitable for your needs based on:
 
 The worker tools images have multiple release tracks, these will determine how you receive updates as they're pushed to Docker Hub.
 
-Release Track  | Windows | Ubuntu
+Release Track  | Ubuntu | Windows 
 ---------| --------------- | ---
 latest | ubuntu.18.04 | windows.ltsc2019
 Major | 1-ubuntu.18.04 | 1-windows.ltsc2019
 Major.Minor | 1.0-ubuntu.18.04 | 1.0-windows.ltsc2019
-Major.Minor.Patch | 1.0.1-ubuntu.18.04 | 1.0.1-windows.ltsc2019
+Major.Minor.Patch | 1.0.1-ubuntu.18.04 | 1.0.2-windows.ltsc2019
 
 # Full Tag Listing
 
