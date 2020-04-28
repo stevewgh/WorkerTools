@@ -1,15 +1,15 @@
 # About This Image
 
-These images include common tools used for octopus steps and are recommended to use when setting up [execution containers for workers](https://octopus.com/docs/deployment-process/execution-containers-for-workers).
+These images include common tools used for Octopus steps and are the recommended images to use when setting up [execution containers for workers](https://octopus.com/docs/deployment-process/execution-containers-for-workers).
 
-For an Octopus deployment [step](https://octopus.com/docs/deployment-process/steps) running on a [worker](https://octopus.com/docs/infrastructure/workers) or on [Octopus Server](https://octopus.com/docs/infrastructure/workers/built-in-worker) that you define in your [deployment processes](https://octopus.com/docs/deployment-process), you can select a container for the step's execution.
+For an Octopus deployment [step](https://octopus.com/docs/deployment-process/steps) running on a [worker](https://octopus.com/docs/infrastructure/workers) or the [Octopus Server](https://octopus.com/docs/infrastructure/workers/built-in-worker), you can select a container for the step's execution.
 
 # How to Use the Image
 
 Pick an image that is suitable for your needs based on:
 - OS + distribution
 
-The worker tools images have multiple release tracks, based on how you would like to receive updates as they're pushed to docker hub.
+The worker tools images have multiple release tracks, these will determine how you receive updates as they're pushed to Docker Hub.
 
 Release Track  | Windows | Ubuntu
 ---------| --------------- | ---
