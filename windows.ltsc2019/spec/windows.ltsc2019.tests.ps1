@@ -18,7 +18,7 @@ Describe  'installed dependencies' {
     }
 
     It 'has java is installed' {
-      java --version | Select-String -Pattern '14\+36\-1461' | Should BeLike "*14+36-1461*"
+      java -version | Select-String -Pattern '14\+36\-1461' | Should BeLike "*14+36-1461*"
     }
 
     It 'has az is installed' {
