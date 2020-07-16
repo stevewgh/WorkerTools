@@ -22,7 +22,7 @@ Describe  'installed dependencies' {
     }
 
     It 'has az is installed' {
-      az --version | Select-String -Pattern '2.4.0' | Should Match '2.4.0'
+      az version | Select-String -Pattern '2.4.0' | Should Match '2.4.0'
     }
 
     It 'has aws is installed' {
