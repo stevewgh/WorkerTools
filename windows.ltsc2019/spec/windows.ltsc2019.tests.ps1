@@ -14,7 +14,7 @@ Describe  'installed dependencies' {
     }
 
     It 'has dotnet is installed' {
-        dotnet --version | Should Match '3.1.201'
+        dotnet --version | Should Match '3.1.301'
     }
 
     It 'has java is installed' {
