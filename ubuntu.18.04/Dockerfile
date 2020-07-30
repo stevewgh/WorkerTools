@@ -5,14 +5,14 @@ ARG Octopus_Cli_Version=7.3.2
 ARG Octopus_Client_Version=8.4.0
 ARG Azure_Cli_Version=2.4.0\*
 ARG Azure_Powershell_Version=2.2.0
-ARG Helm_Version=v3.0.2
-ARG Node_Version=12.18.2\*
-ARG Kubectl_Version=1.11.1-00
+ARG Helm_Version=v3.2.4
+ARG Node_Version=12.18.3\*
+ARG Kubectl_Version=1.18.6-00
 ARG Terraform_Version=0.12.24
 ARG Eks_Cli_Version=0.23.0
 ARG Ecs_Cli_Version=1.18.1
 ARG Aws_Iam_Authenticator_Version=1.16.8
-ARG Umoci_Version=0.4.5
+ARG Umoci_Version=0.4.6
 
 # get `wget` & software-properties-common
 # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#ubuntu-1804
@@ -137,3 +137,9 @@ RUN curl --silent --location https://github.com/openSUSE/umoci/releases/download
 # https://augeas.net/
 RUN add-apt-repository ppa:rmescandon/yq
 RUN apt-get update && apt-get install -y jq yq openssh-client rsync git augeas-tools
+
+# Skopeo
+# https://github.com/containers/skopeo/blob/master/install.md
+RUN sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_18.04/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list"
+RUN wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_18.04/Release.key -O- | apt-key add -
+RUN apt-get update && apt-get install -y skopeo

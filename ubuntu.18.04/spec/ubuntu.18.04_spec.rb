@@ -17,7 +17,7 @@ end
 
 describe command('java --version') do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/11.0.7/) }
+  its(:stdout) { should contain(/11.0.8/) }
 end
 
 describe command('az --version') do
@@ -32,16 +32,16 @@ end
 
 describe command('node --version') do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/v12.18.2/) }
+  its(:stdout) { should contain(/v12.18.3/) }
 end
 
 describe command('kubectl version') do
-  its(:stdout) { should contain(/v1.11.1/) }
+  its(:stdout) { should contain(/v1.18.6/) }
 end
 
 describe command("helm version") do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/v3.0.2/)}
+  its(:stdout) { should contain(/v3.2.4/)}
 end
 
 describe command("terraform version") do
@@ -100,5 +100,9 @@ describe command("istioctl version") do
 end
 
 describe command("linkerd version") do
+  its(:exit_status) { should eq(0) }
+end
+
+describe command("skopeo --version") do
   its(:exit_status) { should eq(0) }
 end
