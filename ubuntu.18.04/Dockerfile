@@ -129,7 +129,7 @@ RUN curl -sL https://run.linkerd.io/install | sh && \
 
 # Get tools for working with Docker images without the Docker daemon
 # https://github.com/openSUSE/umoci
-RUN curl --silent --location https://github.com/openSUSE/umoci/releases/download/v${Umoci_Version}/umoci.amd64 -o /usr/local/bin/umoci && \
+RUN curl --silent --location https://github.com/opencontainers/umoci/releases/download/v${Umoci_Version}/umoci.amd64 -o /usr/local/bin/umoci && \
     chmod +x /usr/local/bin/umoci
 
 # Get common utilities for scripting
