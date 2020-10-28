@@ -29,7 +29,7 @@ RUN Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force; `
     Install-Module -name AWSPowerShell.NetCore -RequiredVersion 4.0.6 -Force
 
 # # Install NodeJS
-RUN choco install nodejs-lts -y --version 12.18.3 --no-progress
+RUN choco install nodejs-lts -y --version 14.15.0 --no-progress
 
 # # Install kubectl
 RUN Invoke-WebRequest "https://storage.googleapis.com/kubernetes-release/release/v1.18.8/bin/windows/amd64/kubectl.exe" -OutFile .\kubectl.exe; `

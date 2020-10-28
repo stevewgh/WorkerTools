@@ -6,7 +6,7 @@ ARG Octopus_Client_Version=8.8.3
 ARG Azure_Cli_Version=2.10.1\*
 ARG Azure_Powershell_Version=4.5.0
 ARG Helm_Version=v3.3.0
-ARG Node_Version=12.18.3\*
+ARG Node_Version=14.15.0\*
 ARG Kubectl_Version=1.18.8-00
 ARG Terraform_Version=0.13.5
 ARG Eks_Cli_Version=0.25.0
@@ -70,7 +70,7 @@ RUN wget --quiet -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --
 
 # Get NodeJS
 # https://websiteforstudents.com/how-to-install-node-js-10-11-12-on-ubuntu-16-04-18-04-via-apt-and-snap/\
-RUN wget --quiet -O - https://deb.nodesource.com/setup_12.x | bash && \
+RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash && \
     apt-get install -y nodejs=${Node_Version}
 
 # Get Kubectl
