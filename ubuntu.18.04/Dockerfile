@@ -13,6 +13,8 @@ ARG Eks_Cli_Version=0.25.0
 ARG Ecs_Cli_Version=1.20.0
 ARG Aws_Iam_Authenticator_Version=0.5.1
 ARG Umoci_Version=0.4.6
+ARG Dotnet_Sdk_Version=3.1.401
+ARG Java_Jdk_Version=11.0.8
 
 # get `wget` & software-properties-common
 # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#ubuntu-1804
@@ -52,11 +54,11 @@ RUN wget --quiet -O - https://raw.githubusercontent.com/kubernetes/helm/master/s
 # https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-ubuntu-1804
 RUN apt-get install -y apt-transport-https && \
     apt-get update && \
-    apt-get install -y dotnet-sdk-3.1
+    apt-get install -y dotnet-sdk-3.1=${Dotnet_Sdk_Version}
 
 # Get JDK
 # https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-on-ubuntu-18-04
-RUN apt-get install -y default-jdk
+RUN apt-get install -y default-jdk=${Java_Jdk_Version}
 
 # Install common Java tools
 RUN apt-get install -y maven gradle
