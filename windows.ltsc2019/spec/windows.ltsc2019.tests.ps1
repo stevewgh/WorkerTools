@@ -49,7 +49,7 @@ Describe  'installed dependencies' {
     }
 
     It 'has terraform installed' {
-        terraform version | Should Match '0.13.5'
+        terraform version | Should Match '0.13.4'
         $LASTEXITCODE | Should be 0
     }
 
