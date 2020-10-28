@@ -51,7 +51,7 @@ end
 
 describe command("terraform version") do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/Terraform v0.13.0/)}
+  its(:stdout) { should contain(/Terraform v0.13.5/)}
 end
 
 describe "python" do
