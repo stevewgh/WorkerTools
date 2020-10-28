@@ -11,7 +11,7 @@ RUN $ProgressPreference = 'SilentlyContinue'; `
 
 # Install dotnet 3+
 RUN Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -outFile 'dotnet-install.ps1'; `
-    .\dotnet-install.ps1; `
+    .\dotnet-install.ps1 -Version "3.1.401"; `
     rm dotnet-install.ps1
 
 # Install JDK
