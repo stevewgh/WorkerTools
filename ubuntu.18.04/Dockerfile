@@ -13,7 +13,7 @@ ARG Eks_Cli_Version=0.25.0
 ARG Ecs_Cli_Version=1.20.0
 ARG Aws_Iam_Authenticator_Version=0.5.1
 ARG Umoci_Version=0.4.6
-ARG Dotnet_Sdk_Version=3.1.401
+ARG Dotnet_Sdk_Version=3.1.401-1
 ARG Java_Jdk_Version=11.0.8
 
 # get `wget` & software-properties-common
