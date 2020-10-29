@@ -5,6 +5,7 @@ Write-Host 'Running tests with Pester v'+$($pesterModules[0].Version)
 
 $javaVersion = java -version 2>&1
 Write-Host "Java version: $javaVersion"
+$javaVersion | % GetType | % Name
 
 Describe  'installed dependencies' {
     It 'has powershell installed' {
