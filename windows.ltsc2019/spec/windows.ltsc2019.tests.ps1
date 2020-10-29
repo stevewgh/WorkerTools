@@ -3,6 +3,9 @@ $ErrorActionPreference = "SilentlyContinue"
 $pesterModules = @( Get-Module -Name "Pester");
 Write-Host 'Running tests with Pester v'+$($pesterModules[0].Version)
 
+$javaVersion = java -version 2>&1
+Write-Host "Java version: $javaVersion"
+
 Describe  'installed dependencies' {
     It 'has powershell installed' {
         $PSVersionTable.PSVersion.ToString() | Should Match '5.1.17763'
@@ -20,8 +23,6 @@ Describe  'installed dependencies' {
     }
 
     It 'has java installed' {
-        $javaVersion = java -version 2>&1
-        Write-Host "Java version: $javaVersion"
         $javaVersion | Select-String -Pattern '14\.0\.2' | Should BeLike "*14.0.2*"
         $LASTEXITCODE | Should be 0
     } 
