@@ -99,7 +99,11 @@ RUN apt-get install -y python3-pip groff
 
 # Get AWS CLI
 # https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html#install-linux-awscli
-RUN pip3 install "awscli>=1.18.0,<=1.19.0"  --upgrade
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.60.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/instal && \
+    rm awscliv2.zip && \
+    rm -rf ./aws
 
 # Get EKS CLI
 # https://github.com/weaveworks/eksctl

@@ -32,7 +32,7 @@ end
 
 describe command('aws --version') do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/1.18/) }
+  its(:stdout) { should contain(/2.0.60/) }
 end
 
 describe command('node --version') do
