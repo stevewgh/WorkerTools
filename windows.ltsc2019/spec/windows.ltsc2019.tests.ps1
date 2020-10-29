@@ -20,9 +20,11 @@ Describe  'installed dependencies' {
     }
 
     It 'has java installed' {
-      java -version 2>&1 | Select-String -Pattern '14\.0\.2' | Should BeLike "*14.0.2*"
-      $LASTEXITCODE | Should be 0
-    }
+        $javaVersion = java -version 2>&1
+        Write-Output "Java version: $javaVersion"
+        $javaVersion | Select-String -Pattern '14\.0\.2' | Should BeLike "*14.0.2*"
+        $LASTEXITCODE | Should be 0
+    } 
 
     It 'has az installed' {
       $output = (& az version) | convertfrom-json
