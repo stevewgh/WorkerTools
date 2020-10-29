@@ -1,4 +1,4 @@
-$ErrorActionPreference = "SilentlyContinue"
+$ErrorActionPreference = "Continue"
 
 $pesterModules = @( Get-Module -Name "Pester");
 Write-Host 'Running tests with Pester v'+$($pesterModules[0].Version)
