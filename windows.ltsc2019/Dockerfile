@@ -20,10 +20,13 @@ RUN choco install openjdk14 --allow-empty-checksums --yes --no-progress --versio
 # Install Azure CLI
 RUN choco install azure-cli -y --version 2.14.0 --no-progress
 
-# # Install AWS CLI
+# Install the AWS CLI
+RUN choco install aws-cli -y --version 2.0.60 --no-progress
+
+# # Install AWS PowerShell module
 # # https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-set-up-windows.html#ps-installing-awspowershellnetcore
 RUN Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force; `
-    Install-Module -name AWSPowerShell.NetCore -RequiredVersion 4.0.6 -Force
+    Install-Module -name AWSPowerShell.NetCore -RequiredVersion 4.1.2 -Force
 
 # # Install NodeJS
 RUN choco install nodejs-lts -y --version 14.15.0 --no-progress

@@ -30,9 +30,13 @@ Describe  'installed dependencies' {
       $LASTEXITCODE | Should be 0
     }
 
+    It 'has aws cli installed' {
+      aws --version 2>&1 | Should Match '2.0.60'
+    } 
+
     It 'has aws powershell installed' {
-      Get-AWSPowerShellVersion | Should Match '4.0.6'
-    }
+      Get-AWSPowerShellVersion | Should Match '4.1.2'
+    } 
 
     It 'has node installed' {
         node --version | Should Match '14.15.0'
