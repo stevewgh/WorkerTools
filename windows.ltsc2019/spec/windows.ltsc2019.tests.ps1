@@ -21,7 +21,7 @@ Describe  'installed dependencies' {
 
     It 'has java installed' {
         $javaVersion = java -version 2>&1
-        Write-Output "Java version: $javaVersion"
+        Write-Host "Java version: $javaVersion"
         $javaVersion | Select-String -Pattern '14\.0\.2' | Should BeLike "*14.0.2*"
         $LASTEXITCODE | Should be 0
     } 
