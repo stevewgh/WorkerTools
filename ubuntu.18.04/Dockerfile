@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 ARG Powershell_Version=7.0.3\*
 ARG Octopus_Cli_Version=7.4.1
 ARG Octopus_Client_Version=8.8.3
-ARG Azure_Cli_Version=2.10.1\*
+ARG Azure_Cli_Version=2.14.0\*
 ARG Azure_Powershell_Version=4.5.0
 ARG Helm_Version=v3.3.0
 ARG Node_Version=14.15.0\*

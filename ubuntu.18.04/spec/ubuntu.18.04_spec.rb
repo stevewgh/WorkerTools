@@ -27,7 +27,7 @@ end
 
 describe command('az --version') do
   its(:exit_status) { should eq(0) }
-  its(:stdout) { should contain(/2.10.1/) }
+  its(:stdout) { should contain(/2.14.0/) }
 end
 
 describe command('aws --version') do
