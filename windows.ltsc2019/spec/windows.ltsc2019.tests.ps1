@@ -1,5 +1,6 @@
-$pesterModules = @( Get-Module -Name "Pester" -ErrorAction "SilentlyContinue" );
+$ErrorActionPreference = "SilentlyContinue"
 
+$pesterModules = @( Get-Module -Name "Pester");
 Write-Host 'Running tests with Pester v'+$($pesterModules[0].Version)
 
 Describe  'installed dependencies' {
@@ -48,9 +49,9 @@ Describe  'installed dependencies' {
         $LASTEXITCODE | Should be 0
     }
 
+    # If the terraform version is not the latest, then `terraform version` returns multiple lines and a non-zero return code 
     It 'has terraform installed' {
-        terraform version | Should Match '0.13.4'
-        $LASTEXITCODE | Should be 0
+        terraform version | Select-Object -First 0 | Should Match '0.13.4'
     }
 
     It 'has python installed' {
