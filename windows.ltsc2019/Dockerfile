@@ -15,7 +15,7 @@ RUN Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -outFile 'dotnet-i
     rm dotnet-install.ps1
 
 # Install JDK
-RUN choco install openjdk14 --allow-empty-checksums --yes --no-progress; refreshenv
+RUN choco install openjdk14 --allow-empty-checksums --yes --no-progress --version 14.0.2; refreshenv
 
 # Install Azure CLI
 RUN choco install azure-cli -y --version 2.10.1 --no-progress
