@@ -165,7 +165,7 @@ Task("Test")
 
         if (IsRunningOnUnix()) {
             processSettings = new ProcessSettings{
-                Arguments = $"run -v {currentDirectory}:/app {testContainerName} bash -c \"cd ./app/{dockerTag.imageDirectory} && ./scripts/run_tests_during_build.sh\""
+                Arguments = $"run -v {currentDirectory}:/app {testContainerName} pwsh -file /app/{dockerTag.imageDirectory}/scripts/run-tests.ps1"
             };
         } else {
             var specPath = "spec\\";
