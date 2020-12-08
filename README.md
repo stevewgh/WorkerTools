@@ -13,7 +13,7 @@ N.B. all commands below should be run from the project root directory.
 
 ### Ubuntu
 
-Our tests are implemented in `serverspec`, which relies on `ruby` and `rspec`.
+Our tests are implemented in `Pester`, which relies on `PowerShell`.
 
 #### Option 1: Build and Test scripts
 
@@ -29,13 +29,13 @@ Runs a build and test of the `ubuntu.18.04` container
 cd ubuntu.18.04
 docker build . -t worker-tools
 docker build . -t worker-tools-tests -f Tests.Dockerfile --build-arg ContainerUnderTest=worker-tools
-docker run -it -v `pwd`:/app worker-tools-tests
+docker run -it -v `pwd`:/app worker-tools-tests pwsh
 ```
 
 Then within the running docker container
 
-```bash
-cd app && bundle install && bundle exec rspec
+```powershell
+/app/scripts/run-tests.ps1
 ```
 
 ### Windows
@@ -54,12 +54,11 @@ Runs a build and test of the `windows.ltsc2019` container
 cd windows.ltsc2019
 docker build . -t worker-tools
 docker build . -t worker-tools-tests -f Tests.Dockerfile --build-arg ContainerUnderTest=worker-tools
-docker run -it -v ${pwd}:c:\app worker-tools-tests powershell
+docker run -it -v ${pwd}:c:\app worker-tools-tests pwsh
 ```
 
 Then within the running docker container
 
 ```powershell
-cd c:\app
-Invoke-Pester spec\windows.ltsc2019* -EnableExit
+/app/scripts/run-tests.ps1
 ```
