@@ -6,15 +6,15 @@ ARG Octopus_Client_Version=8.8.3
 ARG Azure_Cli_Version=2.14.0\*
 ARG Azure_Powershell_Version=4.5.0
 ARG Helm_Version=v3.3.0
-ARG Node_Version=14.15.1\*
+ARG Node_Version=14.16.1\*
 ARG Kubectl_Version=1.18.8-00
-ARG Terraform_Version=0.13.5
+ARG Terraform_Version=0.13.7
 ARG Eks_Cli_Version=0.25.0
 ARG Ecs_Cli_Version=1.20.0
 ARG Aws_Iam_Authenticator_Version=0.5.1
 ARG Umoci_Version=0.4.6
 ARG Dotnet_Sdk_Version=3.1.401-1
-ARG Java_Jdk_Version=11.0.9.1+1-0ubuntu1~18.04
+ARG Java_Jdk_Version=11.0.11+9-0ubuntu2~18.04
 
 
 # get `wget` & software-properties-common
@@ -93,7 +93,7 @@ RUN wget https://releases.hashicorp.com/terraform/${Terraform_Version}/terraform
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
     apt-get install -y ca-certificates gnupg && \
     wget -q -O - https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
-    apt-get update && apt-get install -y google-cloud-sdk
+    apt-get update && apt-get install -y google-cloud-sdk=339.0.0-0
 
 # Get python & groff
 RUN apt-get install -y python3-pip groff
