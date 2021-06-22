@@ -11,13 +11,13 @@ ARG Google_Cloud_Cli_Version=339.0.0
 ARG Helm_Version=3.3.0
 ARG Java_Jdk_Version=14.0.2
 ARG Kubectl_Version=1.18.8
-ARG Node_Version=14.17.0
+ARG Node_Version=14.17.1
 ARG Octopus_Cli_Version=7.4.1
 ARG Octopus_Client_Version=8.8.3
 ARG Powershell_Version=7.0.3
 ARG Python_Version=3.8.5
 ARG ScriptCs_Version=0.17.1
-ARG Terraform_Version=0.13.7
+ARG Terraform_Version=1.0.0
 ARG 7Zip_Version=19.0
 
 # Install Choco

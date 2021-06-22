@@ -37,7 +37,7 @@ Describe  'installed dependencies' {
     }
 
     It 'has node installed' {
-        node --version | Should -match '14.17.0'
+        node --version | Should -match '14.17.1'
         $LASTEXITCODE | Should -be 0
     }
 
@@ -53,7 +53,7 @@ Describe  'installed dependencies' {
 
     # If the terraform version is not the latest, then `terraform version` returns multiple lines and a non-zero return code
     It 'has terraform installed' {
-        terraform version | Select-Object -First 1 | Should -match '0.13.7'
+        terraform version | Select-Object -First 1 | Should -match '1.0.0'
     }
 
     It 'has python3 installed' {
