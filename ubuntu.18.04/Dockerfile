@@ -1,7 +1,8 @@
 FROM ubuntu:18.04
 
 ARG Aws_Cli_Version=2.0.60
-ARG Aws_Iam_Authenticator_Version=0.5.1
+ARG Aws_Iam_Authenticator_Version=0.5.3
+ARG Aws_Powershell_Version=4.1.2
 ARG Azure_Cli_Version=2.14.0\*
 ARG Azure_Powershell_Version=4.5.0
 ARG Dotnet_Sdk_Version=3.1.401-1
@@ -13,7 +14,6 @@ ARG Java_Jdk_Version=11.0.11+9-0ubuntu2~18.04
 ARG Kubectl_Version=1.18.8-00
 ARG Octopus_Cli_Version=7.4.1
 ARG Octopus_Client_Version=8.8.3
-ARG Node_Version=14.17.2\*
 ARG Powershell_Version=7.0.6\*
 ARG Terraform_Version=1.0.0
 ARG Umoci_Version=0.4.6
@@ -44,6 +44,10 @@ RUN apt-get update && \
 RUN pwsh -c 'Install-Package -Force Octopus.Client -MaximumVersion "'${Octopus_Client_Version}'" -source https://www.nuget.org/api/v2 -SkipDependencies' && \
     octopusClientPackagePath=$(pwsh -c '(Get-Item ((Get-Package Octopus.Client).source)).Directory.FullName') && \
     cp -r $octopusClientPackagePath/lib/netstandard2.0/* .
+
+# Get AWS Powershell core modules
+# https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-set-up-linux-mac.html
+RUN pwsh -c 'Install-Module -Force -Name AWSPowerShell.NetCore -AllowClobber -Scope AllUsers -MaximumVersion "'${Aws_Powershell_Version}'"'
 
 # Get AZ Powershell core modules
 # https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.6.1
@@ -77,7 +81,7 @@ RUN wget --quiet -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --
 # Get NodeJS
 # https://websiteforstudents.com/how-to-install-node-js-10-11-12-on-ubuntu-16-04-18-04-via-apt-and-snap/\
 RUN wget --quiet -O - https://deb.nodesource.com/setup_14.x | bash && \
-    apt-get install -y nodejs=${Node_Version}
+    apt-get install -y nodejs
 
 # Get Kubectl
 # https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-using-native-package-management
