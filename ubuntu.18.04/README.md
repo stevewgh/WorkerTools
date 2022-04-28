@@ -1,12 +1,20 @@
 # Ubuntu WorkerTools
 
-| Repository:Tag                                    | Digest                                                                  |
-|---------------------------------------------|-------------------------------------------------------------------------|
-| octopusdeploy/worker-tools:windows.ltsc2019 | sha256:5f436f9068be4033309636340b6c9d45998617d89ff47eef00b20b0731645d9b |
+## Image Name
+`octopusdeploy/worker-tools`
 
+## Tags
+
+- `3.3.2-ubuntu.18.04`
+- `3.3-ubuntu.18.04`
+- `3-ubuntu.18.04`
+- `ubuntu.18.04`
+
+## Digest
+`sha256:5f436f9068be4033309636340b6c9d45998617d89ff47eef00b20b0731645d9b`
 
 ## Base Image
-ubuntu:18.04
+`ubuntu:18.04`
 
 ## Installed Software
 * Aws CLI 2.0.60

@@ -1,10 +1,20 @@
 # Windows WorkerTools
-| Repository:Tag                                    | Digest                                                                  |
-|---------------------------------------------|-------------------------------------------------------------------------|
-| octopusdeploy/worker-tools:windows.ltsc2019 | sha256:59c770b38a8c5e3ec9e347a3155cd0e2748c46cb498d82bb855041d845b3b52f |
+
+## Image Name
+`octopusdeploy/worker-tools`
+
+## Tags
+
+- `3.3.2-windows.ltsc2019`
+- `3.3-windows.ltsc2019`
+- `3-windows.ltsc2019`
+- `windows.ltsc2019`
+
+## Digest
+`sha256:59c770b38a8c5e3ec9e347a3155cd0e2748c46cb498d82bb855041d845b3b52f`
 
 ## Base Image
-mcr.microsoft.com/windows/servercore:ltsc2019
+`mcr.microsoft.com/windows/servercore:ltsc2019`
 
 ## Installed Software
 * Aws CLI 2.0.60
