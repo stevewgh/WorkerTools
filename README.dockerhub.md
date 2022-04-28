@@ -10,8 +10,8 @@ Pick an image that is suitable for your needs based on OS + distribution.
 
 | Operating System  | Installed Tools and Versions |
 | ------------- | ------------- |
-| Ubuntu 18.04  | [Dockerfile](https://github.com/OctopusDeploy/WorkerTools/blob/master/ubuntu.18.04/Dockerfile)  |
-| Windows Server Core 2019  | [Dockerfile](https://github.com/OctopusDeploy/WorkerTools/blob/master/windows.ltsc2019/Dockerfile)  |
+| Ubuntu 18.04  | [Installed tools](./ubuntu.18.04/README.md) ([Dockerfile](https://github.com/OctopusDeploy/WorkerTools/blob/master/ubuntu.18.04/Dockerfile))  |
+| Windows Server Core 2019  | [Installed tools](./windows.ltsc2019/README.md) ([Dockerfile](https://github.com/OctopusDeploy/WorkerTools/blob/master/windows.ltsc2019/Dockerfile))  |
 
 The images we publish have multiple release tracks, and are [semantically versioned](https://semver.org/). To ensure stability within your deployment processes, we recommend using the full `major.minor.patch` tag when using the `octopusdeploy/worker-tools` image - for example, use `2.0.2-ubuntu.18.04`, not `ubuntu.18.04`, unless you have a particular use-case that is more tolerant of changes.
 
