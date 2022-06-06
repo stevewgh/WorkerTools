@@ -49,7 +49,7 @@ class OctopusDockerTag
 Context.Log.Verbosity = Argument("Verbosity", Verbosity.Normal);
 
 var target = Argument("target", "Default");
-var dockerNamespace = Argument("docker-namespace", "octopusdeploy/worker-tools");
+var dockerNamespace = Argument("docker-namespace", "packages.octopushq.com/artifactory/docker-local/octopusdeploy/workertools");
 var imageDirectory = Argument("image-directory", "ubuntu.18.04");
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -186,21 +186,22 @@ Task("Test")
     }
     catch (Exception e)
     {
-        Information(e);
         throw; // rethrow the exception so cake will fail
+    } finally {
+        
     }
 });
 
-Task("Push")
+Task("Push to Artifactory")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .Does(() =>
 {
     try
     {
-        Information("Releasing image to Docker Hub");
+        Information("Releasing image to Artifactory");
         dockerTag.Tags().ToList().ForEach((tag) => {
-            Information("Releasing image to Docker Hub");
+            Information("Releasing image to Artifactory");
             using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"push {tag}" }))
             {
                 process.WaitForExit();
