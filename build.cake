@@ -186,13 +186,12 @@ Task("Test")
     }
     catch (Exception e)
     {
+        Information(e);
         throw; // rethrow the exception so cake will fail
-    } finally {
-        
     }
 });
 
-Task("Push to Artifactory")
+Task("Push")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .Does(() =>
