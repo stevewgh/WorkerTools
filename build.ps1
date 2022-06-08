@@ -47,7 +47,7 @@ Param(
     [string]$Script = "build.cake",
     [string]$Target = "Default",
     [string]$ImageDirectory = "windows.ltsc2019",
-    [string]$DockerNamespace = "packages.octopushq.com/artifactory/docker-local/octopusdeploy/worker-tools",
+    [string]$DockerNamespace = "docker.packages.octopushq.com/octopusdeploy/worker-tools",
     [ValidateSet("Release", "Debug")]
     [string]$Configuration = "Release",
     [ValidateSet("Quiet", "Minimal", "Normal", "Verbose", "Diagnostic")]

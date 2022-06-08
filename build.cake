@@ -49,7 +49,7 @@ class OctopusDockerTag
 Context.Log.Verbosity = Argument("Verbosity", Verbosity.Normal);
 
 var target = Argument("target", "Default");
-var dockerNamespace = Argument("docker-namespace", "packages.octopushq.com/artifactory/docker-local/octopusdeploy/worker-tools");
+var dockerNamespace = Argument("docker-namespace", "docker.packages.octopushq.com/octopusdeploy/worker-tools");
 var imageDirectory = Argument("image-directory", "ubuntu.18.04");
 
 ///////////////////////////////////////////////////////////////////////////////
