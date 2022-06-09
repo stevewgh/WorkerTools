@@ -12,9 +12,7 @@ step "Push Docker image" {
             DockerPush.Target.Docker.Repository = "index.docker.io/octopusdeploy/worker-tools"
             Octopus.Action.RunOnServer = "true"
             Octopus.Action.Template.Id = "ActionTemplates-2141"
-            Octopus.Action.Template.Version = "0"
-            OctopusUseBundledTooling = "False"
-            WorkerTools.OS = "windows"
+            Octopus.Action.Template.Version = "2"
         }
         worker_pool = "Hosted Ubuntu"
 
