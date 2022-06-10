@@ -1,6 +1,7 @@
 step "Push Docker image" {
 
     action {
+        environments = ["Dockerhub"]
         properties = {
             DockerPush.Source.Docker.Registry.Hostname = "#{OctopusDockerRegistry.Hostname}"
             DockerPush.Source.Docker.Registry.Password = "#{OctopusDockerRegistry.Password}"
