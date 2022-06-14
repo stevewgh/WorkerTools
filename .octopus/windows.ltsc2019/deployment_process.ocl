@@ -1,26 +1,3 @@
-step "Update Latest, Major and Minor Tags for a Docker image" {
-
-    action {
-        environments = ["Artifactory"]
-        properties = {
-            DockerPush.Docker.Registry.Hostname = "#{OctopusDockerRegistry.Hostname}"
-            DockerPush.Docker.Registry.Password = "#{OctopusDockerRegistry.Password}"
-            DockerPush.Docker.Registry.Username = "#{OctopusDockerRegistry.Username}"
-            DockerPush.Docker.Repository = "docker.packages.octopushq.com/octopusdeploy/worker-tools"
-            Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Template.Id = "ActionTemplates-2161"
-            Octopus.Action.Template.Version = "0"
-            OctopusUseBundledTooling = "False"
-        }
-        worker_pool = "Hosted Ubuntu"
-
-        container {
-            feed = "docker.packages.octopushq"
-            image = "octopusdeploy/tool-containers/tool-skopeo-cli"
-        }
-    }
-}
-
 step "Push Docker image" {
 
     action {
