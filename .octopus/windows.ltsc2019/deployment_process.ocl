@@ -24,7 +24,7 @@ step "Update Latest, Major and Minor Tags for a Docker image" {
 step "Push Docker image" {
 
     action {
-        environments = ["Dockerhub"]
+        environments = ["Dockerhub", "Artifactory"]
         properties = {
             DockerPush.Source.Docker.Registry.Hostname = "#{OctopusDockerRegistry.Hostname}"
             DockerPush.Source.Docker.Registry.Password = "#{OctopusDockerRegistry.Password}"
@@ -33,7 +33,7 @@ step "Push Docker image" {
             DockerPush.Target.Docker.Registry.Hostname = "#{DockerHubDockerRegistry.Hostname}"
             DockerPush.Target.Docker.Registry.Password = "#{DockerHubDockerRegistry.Password}"
             DockerPush.Target.Docker.Registry.Username = "#{DockerHubDockerRegistry.Username}"
-            DockerPush.Target.Docker.Repository = "index.docker.io/octopusdeploy/worker-tools"
+            DockerPush.Target.Docker.Repository = "#{Docker.Registry.Target.Repository}"
             Octopus.Action.RunOnServer = "true"
             Octopus.Action.Template.Id = "ActionTemplates-2141"
             Octopus.Action.Template.Version = "3"
