@@ -1,7 +1,7 @@
 step "Push Docker image" {
 
     action {
-        environments = ["Artifactory"]
+        environments = ["Staging"]
         properties = {
             DockerPush.Source.Docker.Registry.Hostname = "#{OctopusDockerRegistry.Hostname}"
             DockerPush.Source.Docker.Registry.Password = "#{OctopusDockerRegistry.Password}"
