@@ -217,7 +217,7 @@ Task("OctoRelease")
     var octopusProjectName = Argument("octopus-project-name", "");
 
     Information($"Creating a release for project: {octopusProjectName}");
-    Information($"dockerTag.version: {dockerTag.version}")
+    Information($"dockerTag.version: {dockerTag.version}");
     
     try 
     {
