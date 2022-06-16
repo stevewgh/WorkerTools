@@ -4,6 +4,7 @@
 #tool "nuget:?package=GitVersion.CommandLine&version=4.0.0"
 #addin "nuget:?package=Cake.Docker&version=0.10.0"
 #addin "nuget:?package=Cake.Incubator&version=5.1.0"
+#tool "nuget:?package=OctopusTools&version=9.0.0"
 
 using Cake.Incubator.LoggingExtensions;
 
@@ -25,19 +26,8 @@ class OctopusDockerTag
         this.imageName = this.CreateTag(this.version);
     }
 
-    public string[] Tags() {
-        return new string[] {
-            this.CreateTag("latest"),
-            this.CreateTag(this.version),
-            this.CreateTag(this.gitVersion.Major.ToString()),
-            this.CreateTag($"{this.gitVersion.Major}.{this.gitVersion.Minor}")
-        };
-    }
-
     private string CreateTag(string version) {
-        return (version == "latest") ?
-            $"{this.dockerNamespace}:{this.imageDirectory}" :
-            $"{this.dockerNamespace}:{string.Join(".", version)}-{this.imageDirectory}";
+        return $"{this.dockerNamespace}:{string.Join(".", version)}-{this.imageDirectory}";
     }
 }
 
@@ -133,8 +123,8 @@ Task("Build")
     .Does(() =>
 {
     Information("Tags to be built:");
-    dockerTag.Tags().ToList().ForEach((tag) => Information(tag));
-    DockerBuild(new DockerImageBuildSettings { Tag = dockerTag.Tags() }, dockerTag.imageDirectory);
+    Information(dockerTag.imageName);
+    DockerBuild(new DockerImageBuildSettings { Tag = new string[] { dockerTag.imageName } }, dockerTag.imageDirectory);
 
     Information("Building test container {1} with ContainerUnderTest={0}", dockerTag.imageName, testContainerName);
 
@@ -199,25 +189,41 @@ Task("Push")
     try
     {
         Information("Releasing image to Artifactory");
-        dockerTag.Tags().ToList().ForEach((tag) => {
-            Information("Releasing image to Artifactory");
-            using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"push {tag}" }))
+        Information($"Releasing tag {dockerTag.imageName} to Artifactory");
+        using(var process = StartAndReturnProcess("docker", new ProcessSettings{ Arguments = $"push {dockerTag.imageName}" }))
+        {
+            process.WaitForExit();
+            // This should output 0 as valid arguments supplied
+            Information("Exit code: {0}", process.GetExitCode());
+            if (process.GetExitCode() > 0)
             {
-                process.WaitForExit();
-                // This should output 0 as valid arguments supplied
-                Information("Exit code: {0}", process.GetExitCode());
-                if (process.GetExitCode() > 0)
-                {
-                    throw new Exception("Pushing docker image failed");
-                }
+                throw new Exception("Pushing docker image failed");
             }
-        });
+        }
 
     } catch (Exception e)
     {
         Information(e);
         throw; // rethrow the exception so cake will fail
     }
+});
+
+Task("OctoRelease")
+    .IsDependentOn("Push")
+    .Does(() =>
+{
+    var octopusServerName = Argument("octopus-server-url", "");
+    var octopusApiKey = Argument("octopus-api-key", "");
+    var octopusProjectName = Argument("octopus-project-name", "");
+
+    Information($"Creating a release for project: {octopusProjectName}");
+    OctoCreateRelease(octopusProjectName, new CreateReleaseSettings {
+        Server = octopusServerName,
+        ApiKey = octopusApiKey,
+        EnableDebugLogging = true,
+        EnableServiceMessages = true,
+        ReleaseNumber = dockerTag.version
+    });
 });
 
 //////////////////////////////////////////////////////////////////////
