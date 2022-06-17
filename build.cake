@@ -217,13 +217,42 @@ Task("OctoRelease")
     var octopusProjectName = Argument("octopus-project-name", "");
 
     Information($"Creating a release for project: {octopusProjectName}");
-    OctoCreateRelease(octopusProjectName, new CreateReleaseSettings {
-        Server = octopusServerName,
-        ApiKey = octopusApiKey,
-        EnableDebugLogging = true,
-        EnableServiceMessages = true,
-        ReleaseNumber = dockerTag.version
-    });
+    Information($"dockerTag.version: {dockerTag.version}");
+
+    Information(Environment.CurrentDirectory);
+    var process = StartAndReturnProcess("./tools/OctopusTools.9.0.0/tools/octo.exe");
+    Information(process);
+
+    try
+    {
+        OctoCreateRelease(octopusProjectName, new CreateReleaseSettings {
+            ToolPath = $"{Environment.CurrentDirectory}/tools/OctopusTools.9.0.0/tools/octo.exe",
+            Server = octopusServerName,
+            ApiKey = octopusApiKey,
+            EnableDebugLogging = true,
+            EnableServiceMessages = true,
+            ReleaseNumber = dockerTag.version
+        });
+    }
+    catch (Exception e)
+    {
+        Information(e);
+    }
+
+    try
+    {
+        OctoCreateRelease(octopusProjectName, new CreateReleaseSettings {
+            Server = octopusServerName,
+            ApiKey = octopusApiKey,
+            EnableDebugLogging = true,
+            EnableServiceMessages = true,
+            ReleaseNumber = dockerTag.version
+        });
+    }
+    catch (Exception e)
+    {
+        Information(e);
+    }
 });
 
 //////////////////////////////////////////////////////////////////////
