@@ -83,7 +83,7 @@ Setup(context =>
             Verbose("GitVersion:\n{0}", gitVersionInfo.Dump());
             Information("Building {1} images v{0}", gitVersionInfo.SemVer, dockerNamespace);
             dockerTag = new OctopusDockerTag(gitVersionInfo, dockerNamespace, imageDirectory);
-            Information($"##teamcity[setParameter name='WorkerToolsVersion' value='{dockerTag.version}']");
+            context.BuildSystem().TeamCity.SetParameter("WorkerToolsVersion", dockerTag.version);
         }
         catch (Exception e)
         {
