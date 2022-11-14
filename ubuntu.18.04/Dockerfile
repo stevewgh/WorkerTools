@@ -10,7 +10,7 @@ ARG Ecs_Cli_Version=1.20.0
 ARG Eks_Cli_Version=0.25.0
 ARG Google_Cloud_Cli_Version=339.0.0-0
 ARG Helm_Version=v3.7.1
-ARG Java_Jdk_Version=11.0.15+10-0ubuntu0.18.04.1
+ARG Java_Jdk_Version=11.0.17+8-1ubuntu2~18.04	
 ARG Kubectl_Version=1.18.8-00
 ARG Octopus_Cli_Version=7.4.1
 ARG Octopus_Client_Version=8.8.3
@@ -66,6 +66,7 @@ RUN DOTNET_CLI_TELEMETRY_OPTOUT=1 && \
 
 # Get JDK
 # https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-on-ubuntu-18-04
+# https://packages.ubuntu.com/bionic/openjdk-11-dbg
 RUN apt-get install -y openjdk-11-jdk-headless=${Java_Jdk_Version}
 
 # Install common Java tools
@@ -102,8 +103,11 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
     wget -q -O - https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
     apt-get update && apt-get install -y google-cloud-sdk=${Google_Cloud_Cli_Version}
 
-# Get python & groff
+# Get python3 & groff
 RUN apt-get install -y python3-pip groff
+
+# Install python2
+RUN apt-get install -y python-minimal
 
 # Get AWS CLI
 # https://docs.aws.amazon.com/cli/latest/userguide/install-linux.html#install-linux-awscli
