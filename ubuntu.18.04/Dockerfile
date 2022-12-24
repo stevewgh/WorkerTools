@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-ARG Aws_Cli_Version=2.0.60
+ARG Aws_Cli_Version=2.9.10
 ARG Aws_Iam_Authenticator_Version=0.5.3
 ARG Aws_Powershell_Version=4.1.2
 ARG Azure_Cli_Version=2.14.0\*
