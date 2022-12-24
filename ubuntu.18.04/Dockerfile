@@ -1,21 +1,17 @@
 FROM ubuntu:18.04
 
 ARG Aws_Cli_Version=2.9.10
-ARG Aws_Iam_Authenticator_Version=0.5.3
+ARG Aws_Iam_Authenticator_Version=0.5.9
 ARG Aws_Powershell_Version=4.1.2
-ARG Azure_Cli_Version=2.14.0\*
-ARG Azure_Powershell_Version=4.5.0
 ARG Dotnet_Sdk_Version=6.0
 ARG Ecs_Cli_Version=1.20.0
 ARG Eks_Cli_Version=0.25.0
-ARG Google_Cloud_Cli_Version=339.0.0-0
-ARG Helm_Version=v3.7.1
-ARG Java_Jdk_Version=11.0.17+8-1ubuntu2~18.04	
+ARG Helm_Version=v3.10.3
 ARG Kubectl_Version=1.18.8-00
 ARG Octopus_Cli_Version=7.4.1
 ARG Octopus_Client_Version=8.8.3
 ARG Powershell_Version=7.0.10\*
-ARG Terraform_Version=1.1.3
+ARG Terraform_Version=1.3.6
 ARG Umoci_Version=0.4.6
 
 # get `wget` & software-properties-common
@@ -49,10 +45,6 @@ RUN pwsh -c 'Install-Package -Force Octopus.Client -MaximumVersion "'${Octopus_C
 # https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-set-up-linux-mac.html
 RUN pwsh -c 'Install-Module -Force -Name AWSPowerShell.NetCore -AllowClobber -Scope AllUsers -MaximumVersion "'${Aws_Powershell_Version}'"'
 
-# Get AZ Powershell core modules
-# https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-3.6.1
-RUN pwsh -c 'Install-Module -Force -Name Az -AllowClobber -Scope AllUsers -MaximumVersion "'${Azure_Powershell_Version}'"'
-
 # Get Helm3
 RUN wget --quiet -O - https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash -s -- -v ${Helm_Version}
 
@@ -63,21 +55,6 @@ RUN DOTNET_CLI_TELEMETRY_OPTOUT=1 && \
     apt-get install -y apt-transport-https && \
     apt-get update && \
     apt-get install -y dotnet-sdk-${Dotnet_Sdk_Version}
-
-# Get JDK
-# https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-on-ubuntu-18-04
-# https://packages.ubuntu.com/bionic/openjdk-11-dbg
-RUN apt-get install -y openjdk-11-jdk-headless=${Java_Jdk_Version}
-
-# Install common Java tools
-RUN apt-get install -y maven gradle
-
-# Get Azure CLI
-# https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt?view=azure-cli-latest
-RUN wget --quiet -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null && \
-    echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ bionic main" | tee /etc/apt/sources.list.d/azure-cli.list && \
-    apt-get update && \
-    apt-get install -y azure-cli=${Azure_Cli_Version}
 
 # Get NodeJS
 # https://websiteforstudents.com/how-to-install-node-js-10-11-12-on-ubuntu-16-04-18-04-via-apt-and-snap/\
@@ -95,13 +72,6 @@ RUN wget --quiet -O - https://packages.cloud.google.com/apt/doc/apt-key.gpg | ap
 RUN wget https://releases.hashicorp.com/terraform/${Terraform_Version}/terraform_${Terraform_Version}_linux_amd64.zip && \
     unzip terraform_${Terraform_Version}_linux_amd64.zip && \
     mv terraform /usr/local/bin
-
-# Install Google Cloud CLI
-# https://cloud.google.com/sdk/docs/downloads-apt-get
-RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
-    apt-get install -y ca-certificates gnupg && \
-    wget -q -O - https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
-    apt-get update && apt-get install -y google-cloud-sdk=${Google_Cloud_Cli_Version}
 
 # Get python3 & groff
 RUN apt-get install -y python3-pip groff
@@ -131,18 +101,6 @@ RUN curl --silent --location "https://amazon-ecs-cli.s3.amazonaws.com/ecs-cli-li
 # https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html
 RUN curl --silent --location https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v${Aws_Iam_Authenticator_Version}/aws-iam-authenticator_${Aws_Iam_Authenticator_Version}_linux_amd64 -o /usr/local/bin/aws-iam-authenticator && \
     chmod +x /usr/local/bin/aws-iam-authenticator
-
-# Get the Istio CLI
-# https://istio.io/docs/ops/diagnostic-tools/istioctl/
-RUN curl -sL https://istio.io/downloadIstioctl | sh - && \
-    mv /root/.istioctl/bin/istioctl /usr/local/bin/istioctl && \
-    rm -rf /root/.istioctl
-
-# Get the Linkerd CLI
-# https://linkerd.io/2/getting-started/
-RUN curl -sL https://run.linkerd.io/install | sh && \
-    cp /root/.linkerd2/bin/linkerd /usr/local/bin && \
-    rm -rf /root/.linkerd2
 
 # Get tools for working with Docker images without the Docker daemon
 # https://github.com/openSUSE/umoci
